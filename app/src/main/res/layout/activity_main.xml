@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/editTextFrom"
+        android:id="@+id/editTextFromLocation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTo"
+        android:id="@+id/editTextToLocation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -32,7 +32,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextFrom" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextFromLocation" />
 
     <TextView
         android:id="@+id/textViewLeavingNow"
@@ -52,7 +52,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/button_change_time"
         app:layout_constraintStart_toEndOf="@+id/textViewLeavingNow"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTo" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextToLocation" />
 
     <Button
         android:id="@+id/buttonEditPreferences"
