@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Journey Planner</string>
+    <string name="editText_from">From</string>
+    <string name="editText_to">To</string>
+    <string name="button_change_time">Change time</string>
+    <string name="textView_leaving_now">Leaving: Now</string>
+    <string name="button_edit_preferences">Edit preferences</string>
+    <string name="button_plan_my_journey">Plan my journey</string>
+    <string name="button_my_journeys">My journeys</string>
+</resources>
