@@ -2,6 +2,8 @@ package com.my.journeyplanner.helpers
 
 import android.os.AsyncTask
 import android.util.Log
+import com.my.journeyplanner.TFL_API_APP_ID
+import com.my.journeyplanner.TFL_API_APP_KEY
 
 internal class JourneyPlannerResultsAsyncTask : AsyncTask<String, Void, String>() {
     override fun doInBackground(vararg params: String?): String {

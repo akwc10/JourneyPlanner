@@ -1,4 +1,4 @@
-package com.my.journeyplanner.helpers
+package com.my.journeyplanner
 
 const val TFL_API_BASE_URL = "https://api.tfl.gov.uk/"
 const val TFL_API_APP_ID = "5a5d13d6"
