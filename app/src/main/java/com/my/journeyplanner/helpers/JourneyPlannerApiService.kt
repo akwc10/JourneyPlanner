@@ -18,7 +18,7 @@ interface JourneyPlannerApiService {
     ): Call<JourneyPlannerDisambiguationResult>
 
     companion object {
-        fun apiService() = Retrofit.Builder()
+        fun apiService(): JourneyPlannerApiService = Retrofit.Builder()
             .baseUrl(TFL_API_BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .build().create(JourneyPlannerApiService::class.java)

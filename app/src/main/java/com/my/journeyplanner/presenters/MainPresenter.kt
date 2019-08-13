@@ -13,7 +13,10 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
     }
 
     override fun onPlanMyJourneyClicked() {
-        JourneyPlannerResultsAsyncTask(view.getFromLocation(), view.getToLocation()).execute()
+        JourneyPlannerResultsAsyncTask().execute(
+            view.getFromLocation().text.toString(),
+            view.getToLocation().text.toString()
+        )
     }
 
     override fun onMyJourneysClicked() {
