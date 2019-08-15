@@ -2,16 +2,12 @@ package com.my.journeyplanner.helpers
 
 import android.os.AsyncTask
 import android.util.Log
-import com.my.journeyplanner.TFL_API_APP_ID
-import com.my.journeyplanner.TFL_API_APP_KEY
 
 internal class JourneyPlannerResultsAsyncTask : AsyncTask<String, Void, String>() {
     override fun doInBackground(vararg params: String?): String {
-        val response = JourneyPlannerApiService.apiService().getJourneyResults(
+        val response = JourneyPlannerApiService.createApiService.getJourneyResults(
             params[0] ?: "",
-            params[1] ?: "",
-            TFL_API_APP_ID,
-            TFL_API_APP_KEY
+            params[1] ?: ""
         ).execute()
 
         if (response.isSuccessful) {
