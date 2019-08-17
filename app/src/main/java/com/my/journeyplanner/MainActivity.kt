@@ -6,14 +6,8 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.my.journeyplanner.helpers.JourneyPlannerApiService
-import com.my.journeyplanner.models.JourneyPlannerDisambiguationResult
 import com.my.journeyplanner.presenters.MainPresenter
 import com.my.journeyplanner.views.main.MainContract
-import retrofit2.Call
-
-val apiService by lazy { JourneyPlannerApiService.createApiService }
-var call: Call<JourneyPlannerDisambiguationResult>? = null
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
@@ -47,7 +41,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                 (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
             ) {
-                call = mainPresenter.onPlanMyJourneyClicked()
+                mainPresenter.onPlanMyJourneyClicked()
                 true
             } else {
                 false
@@ -61,8 +55,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        call?.cancel()
+    override fun onStop() {
+        super.onStop()
+        mainPresenter.cancelAsyncCall()
     }
 }
