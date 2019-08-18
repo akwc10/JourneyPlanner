@@ -20,7 +20,7 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
     }
 
     override fun onPlanMyJourneyClicked() {
-        val apiService = JourneyPlannerApiService.createApiService
+        val apiService = JourneyPlannerApiService.createApiService()
 
         call = apiService.getJourneyResults(
             view.getFromLocation().text.toString(),
