@@ -1,12 +1,15 @@
 package com.my.journeyplanner.presenters
 
+import android.util.Log
 import com.my.journeyplanner.helpers.JourneyPlannerApiService
-import com.my.journeyplanner.helpers.retrofitcustomadapter.CustomCall
 import com.my.journeyplanner.models.JourneyPlannerDisambiguationResult
 import com.my.journeyplanner.views.main.MainContract
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainPresenter(private val view: MainContract.View) : MainContract.Presenter {
-    private var call: CustomCall<JourneyPlannerDisambiguationResult>? = null
+    private var call: Call<JourneyPlannerDisambiguationResult>? = null
 
     override fun onChangeTimeClicked() {
 
@@ -24,30 +27,23 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
             view.getToLocation().text.toString()
         )
 
-        call!!.enqueue { journeyPlannerDisambiguationResult, throwable ->
-            println("test: $journeyPlannerDisambiguationResult")
-        }
-
 /*            TODO("Default adapter treats response code 300 Multiple Options as unsuccessful and")
             TODO("puts response in the errorBody but is actually a valid response.")
             TODO("Implement custom adapter to parse the valid response in the errorBody")   */
-//        call!!.enqueue(object : Callback<JourneyPlannerDisambiguationResult> {
-//            override fun onFailure(call: Call<JourneyPlannerDisambiguationResult>, throwable: Throwable) {
-//                Log.e(TAG, "Other error: ${throwable.message}")
-//                Log.e(TAG, "Other error: ${throwable.stackTrace.forEach { println(it) }}")
-//            }
-//
-//            override fun onResponse(
-//                call: Call<JourneyPlannerDisambiguationResult>,
-//                response: Response<JourneyPlannerDisambiguationResult>
-//            ) {
-//                Log.i(TAG, "response: $response")
-//                response.errorBody()?.apply {
-//                    Log.i(TAG, "errorBody().source(): ${source()}")
-//                    Log.i(TAG, "errorBody().charStream().readText(): ${charStream().readText()}")
-//                }
-//            }
-//        })
+        call!!.enqueue(object : Callback<JourneyPlannerDisambiguationResult> {
+            override fun onFailure(call: Call<JourneyPlannerDisambiguationResult>, throwable: Throwable) {
+                Log.e(TAG, "Other error: ${throwable.message}")
+                Log.e(TAG, "Other error: ${throwable.stackTrace.forEach { println(it) }}")
+            }
+
+            override fun onResponse(
+                call: Call<JourneyPlannerDisambiguationResult>,
+                response: Response<JourneyPlannerDisambiguationResult>
+            ) {
+                Log.i(TAG, "response: $response")
+                Log.i(TAG, "response.body(): ${response.body()}")
+            }
+        })
     }
 
     override fun onMyJourneysClicked() {
