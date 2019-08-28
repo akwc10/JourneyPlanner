@@ -61,7 +61,7 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
                             jsonString?.countOccurrences(NOT_IDENTIFIED)!! > 1 -> {
 //                                TODO("How to de-dupe?")
                                 val converter: Converter<ResponseBody, JourneyPlanner.NotIdentifiedResult> =
-                                    JourneyPlannerApiService.retrofit.responseBodyConverter(
+                                    JourneyPlannerApiService.fakeRetrofit.responseBodyConverter(
                                         JourneyPlanner.NotIdentifiedResult::class.java,
                                         arrayOfNulls<Annotation>(0)
                                     )
@@ -84,10 +84,11 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
                             }
                             jsonString.contains(DISAMBIGUATION_OPTIONS) -> {
                                 val converter: Converter<ResponseBody, JourneyPlanner.DisambiguationResult> =
-                                    JourneyPlannerApiService.retrofit.responseBodyConverter(
+                                    JourneyPlannerApiService.fakeRetrofit.responseBodyConverter(
                                         JourneyPlanner.DisambiguationResult::class.java,
                                         arrayOfNulls<Annotation>(0)
                                     )
+
 
                                 try {
                                     val responseErrorBody = response.errorBody()

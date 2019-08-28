@@ -19,15 +19,20 @@ interface JourneyPlannerApiService {
         private const val TFL_API_BASE_URL = "https://api.tfl.gov.uk/"
         private val client = OkHttpClient().newBuilder()
             .addInterceptor(ParametersInterceptor())
+            .addInterceptor(MultiOptionResponseCodeInterceptor())
             .build()
 
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl(TFL_API_BASE_URL)
-            .client(client)
+        val fakeRetrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://ttttt.com/")
+            .client(OkHttpClient().newBuilder().build())
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
 
         fun createApiService(): JourneyPlannerApiService =
-            retrofit.create(JourneyPlannerApiService::class.java)
+            Retrofit.Builder()
+                .baseUrl(TFL_API_BASE_URL)
+                .client(client)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build().create(JourneyPlannerApiService::class.java)
     }
 }

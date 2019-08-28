@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 //        TODO("REMOVE after test")
 //        editTextFromLocation.setText("Marylebone Station")
 //        editTextToLocation.setText("Liverpool Street")
-//        editTextFromLocation.setText("Leicester Square Underground Station")
-//        editTextToLocation.setText("Liverpool Street Underground Station")
-        editTextFromLocation.setText("bfdbfdbdfbfd")
-        editTextToLocation.setText("bfdbfdbdfbfbd")
+        editTextFromLocation.setText("Leicester Square Underground Station")
+        editTextToLocation.setText("Liverpool Street Underground Station")
+//        editTextFromLocation.setText("bfdbfdbdfbfd")
+//        editTextToLocation.setText("bfdbfdbdfbfbd")
     }
 
     override fun getFromLocation(): EditText = editTextFromLocation
