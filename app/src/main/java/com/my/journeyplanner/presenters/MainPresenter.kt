@@ -35,9 +35,9 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
                 throwable: Throwable
             ) {
                 if (throwable is IOException) {
-                    Log.d(TAG, "*** Network failure ***")
+                    Log.d(TAG, "Network failure")
                 } else {
-                    Log.d(TAG, "*** Conversion issue ***")
+                    Log.d(TAG, "Conversion failure")
                 }
             }
 
@@ -46,40 +46,22 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
                 response: Response<JourneyPlanner.ItineraryResult>
             ) {
                 if (response.isSuccessful) {
-                    Log.d(TAG, "*** ItineraryResult: ${response.body()} ***")
+                    Log.d(TAG, "itineraryResult: ${response.body()}")
 //                TODO("Display data in new activity")
-                } else when (response.code()) {
+                } else when (val responseCode = response.code()) {
                     300 -> {
-                        val jsonString = try {
-                            response.errorBody()?.source()?.peek()?.readUtf8()
-                        } catch (e: IOException) {
-                            Log.d(TAG, "${e.message}\n Unable to peek errorBody")
-                            ""
-                        }
+                        val jsonString = readJsonString(response)
 
                         when {
                             jsonString?.countOccurrences(NOT_IDENTIFIED)!! > 1 -> {
-//                                TODO("How to de-dupe?")
                                 val converter: Converter<ResponseBody, JourneyPlanner.NotIdentifiedResult> =
                                     JourneyPlannerApiService.fakeRetrofit.responseBodyConverter(
                                         JourneyPlanner.NotIdentifiedResult::class.java,
                                         arrayOfNulls<Annotation>(0)
                                     )
-
-                                try {
-                                    val responseErrorBody = response.errorBody()
-
-                                    if (responseErrorBody != null) {
-                                        val notIdentifiedResult =
-                                            converter.convert(responseErrorBody)
-                                        Log.d(
-                                            TAG,
-                                            "*** notIdentifiedResult: $notIdentifiedResult ***"
-                                        )
-                                    }
-                                } catch (e: IOException) {
-                                    Log.d(TAG, "Unable to convert errorBody() to JSON")
-                                }
+                                val notIdentifiedResult =
+                                    convertResponseErrorBody(response, converter)
+                                Log.d(TAG, "notIdentifiedResult: $notIdentifiedResult")
 //                                TODO("Prompt no search results and to update search criteria")
                             }
                             jsonString.contains(DISAMBIGUATION_OPTIONS) -> {
@@ -88,31 +70,41 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
                                         JourneyPlanner.DisambiguationResult::class.java,
                                         arrayOfNulls<Annotation>(0)
                                     )
-
-
-                                try {
-                                    val responseErrorBody = response.errorBody()
-
-                                    if (responseErrorBody != null) {
-                                        val disambiguationResult =
-                                            converter.convert(responseErrorBody)
-                                        Log.d(
-                                            TAG,
-                                            "*** disambiguationResult: $disambiguationResult ***"
-                                        )
-                                    }
-                                } catch (e: IOException) {
-                                    Log.d(TAG, "Unable to convert errorBody() to JSON")
-                                }
+                                val disambiguationResult =
+                                    convertResponseErrorBody(response, converter)
+                                Log.d(TAG, "disambiguationResult: $disambiguationResult")
 //                                TODO("Display options in new activity with selectable ListView for disambiguation")
                             }
-                            else -> Log.d(TAG, "*** Response 300 No Match ***")
+                            else -> Log.d(TAG, "responseCode: $responseCode. No Match")
                         }
                     }
-                    else -> Log.d(TAG, "*** Response code: ${response.code()} ***")
+                    else -> Log.d(TAG, "responseCode: $responseCode")
                 }
             }
         })
+    }
+
+    private fun <T> readJsonString(response: Response<T>): String? {
+        return try {
+            response.errorBody()?.source()?.peek()?.readUtf8()
+        } catch (e: IOException) {
+            Log.d(TAG, "${e.message}. Unable to peek errorBody")
+            ""
+        }
+    }
+
+    private fun <T, R> convertResponseErrorBody(
+        response: Response<T>,
+        converter: Converter<ResponseBody, R>
+    ): R? {
+        try {
+            val responseErrorBody = response.errorBody()
+
+            if (responseErrorBody != null) return converter.convert(responseErrorBody)
+        } catch (e: IOException) {
+            Log.d(TAG, "Unable to convert errorBody() to JSON")
+        }
+        return null
     }
 
     override fun onMyJourneysClicked() {
