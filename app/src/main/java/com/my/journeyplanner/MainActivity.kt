@@ -7,11 +7,15 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.my.journeyplanner.presenters.MainPresenter
+import com.my.journeyplanner.usecases.BuildMockRetrofit
+import com.my.journeyplanner.usecases.GetJourneyResults
 import com.my.journeyplanner.views.main.MainContract
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
-    private val mainPresenter by lazy { MainPresenter(this) }
+    private val mainPresenter by lazy {
+        MainPresenter(this, GetJourneyResults(), BuildMockRetrofit())
+    }
 
     private val editTextFromLocation by lazy { findViewById<EditText>(R.id.editTextFromLocation) }
     private val editTextToLocation by lazy { findViewById<EditText>(R.id.editTextToLocation) }

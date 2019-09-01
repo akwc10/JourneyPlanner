@@ -1,9 +1,10 @@
 package com.my.journeyplanner.presenters
 
 import android.util.Log
-import com.my.journeyplanner.helpers.JourneyPlannerApiService
 import com.my.journeyplanner.helpers.countOccurrences
 import com.my.journeyplanner.models.JourneyPlanner
+import com.my.journeyplanner.usecases.BuildMockRetrofit
+import com.my.journeyplanner.usecases.GetJourneyResults
 import com.my.journeyplanner.views.main.MainContract
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -12,7 +13,11 @@ import retrofit2.Converter
 import retrofit2.Response
 import java.io.IOException
 
-class MainPresenter(private val view: MainContract.View) : MainContract.Presenter {
+class MainPresenter(
+    private val view: MainContract.View,
+    private val getJourneyResults: GetJourneyResults,
+    private val buildMockRetrofit: BuildMockRetrofit
+) : MainContract.Presenter {
     private var call: Call<JourneyPlanner.ItineraryResult>? = null
 
     override fun onChangeTimeClicked() {
@@ -24,7 +29,7 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
     }
 
     override fun onPlanMyJourneyClicked() {
-        call = JourneyPlannerApiService.createApiService().getJourneyResults(
+        call = getJourneyResults(
             view.getFromLocation().text.toString(),
             view.getToLocation().text.toString()
         )
@@ -55,7 +60,7 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
                         when {
                             jsonString?.countOccurrences(NOT_IDENTIFIED)!! > 1 -> {
                                 val converter: Converter<ResponseBody, JourneyPlanner.NotIdentifiedResult> =
-                                    JourneyPlannerApiService.mockRetrofit.responseBodyConverter(
+                                    buildMockRetrofit().responseBodyConverter(
                                         JourneyPlanner.NotIdentifiedResult::class.java,
                                         arrayOfNulls<Annotation>(0)
                                     )
@@ -66,7 +71,7 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
                             }
                             jsonString.contains(DISAMBIGUATION_OPTIONS) -> {
                                 val converter: Converter<ResponseBody, JourneyPlanner.DisambiguationResult> =
-                                    JourneyPlannerApiService.mockRetrofit.responseBodyConverter(
+                                    buildMockRetrofit().responseBodyConverter(
                                         JourneyPlanner.DisambiguationResult::class.java,
                                         arrayOfNulls<Annotation>(0)
                                     )
