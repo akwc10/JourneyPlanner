@@ -55,7 +55,7 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
                         when {
                             jsonString?.countOccurrences(NOT_IDENTIFIED)!! > 1 -> {
                                 val converter: Converter<ResponseBody, JourneyPlanner.NotIdentifiedResult> =
-                                    JourneyPlannerApiService.fakeRetrofit.responseBodyConverter(
+                                    JourneyPlannerApiService.mockRetrofit.responseBodyConverter(
                                         JourneyPlanner.NotIdentifiedResult::class.java,
                                         arrayOfNulls<Annotation>(0)
                                     )
@@ -66,7 +66,7 @@ class MainPresenter(private val view: MainContract.View) : MainContract.Presente
                             }
                             jsonString.contains(DISAMBIGUATION_OPTIONS) -> {
                                 val converter: Converter<ResponseBody, JourneyPlanner.DisambiguationResult> =
-                                    JourneyPlannerApiService.fakeRetrofit.responseBodyConverter(
+                                    JourneyPlannerApiService.mockRetrofit.responseBodyConverter(
                                         JourneyPlanner.DisambiguationResult::class.java,
                                         arrayOfNulls<Annotation>(0)
                                     )

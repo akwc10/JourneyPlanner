@@ -1,4 +1,4 @@
-package com.my.journeyplanner.helpers
+package com.my.journeyplanner.helpers.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.Response

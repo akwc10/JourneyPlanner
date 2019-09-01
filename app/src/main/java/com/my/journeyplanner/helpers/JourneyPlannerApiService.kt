@@ -1,5 +1,8 @@
 package com.my.journeyplanner.helpers
 
+import com.my.journeyplanner.helpers.interceptors.MockInterceptor
+import com.my.journeyplanner.helpers.interceptors.MultiOptionResponseCodeInterceptor
+import com.my.journeyplanner.helpers.interceptors.ParametersInterceptor
 import com.my.journeyplanner.models.JourneyPlanner
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -22,9 +25,9 @@ interface JourneyPlannerApiService {
             .addInterceptor(MultiOptionResponseCodeInterceptor())
             .build()
 
-        val fakeRetrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://ttttt.com/")
-            .client(OkHttpClient().newBuilder().build())
+        val mockRetrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://mockurl.com/")
+            .client(OkHttpClient().newBuilder().addInterceptor(MockInterceptor()).build())
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
 
