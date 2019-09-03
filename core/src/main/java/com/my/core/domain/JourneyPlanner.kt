@@ -1,4 +1,4 @@
-package com.my.journeyplanner.models
+package com.my.core.domain
 
 sealed class JourneyPlanner {
     data class NotIdentifiedResult(

@@ -1,9 +1,9 @@
 package com.my.journeyplanner.helpers
 
+import com.my.core.domain.JourneyPlanner
 import com.my.journeyplanner.helpers.interceptors.MockInterceptor
 import com.my.journeyplanner.helpers.interceptors.MultiOptionResponseCodeInterceptor
 import com.my.journeyplanner.helpers.interceptors.ParametersInterceptor
-import com.my.journeyplanner.models.JourneyPlanner
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
