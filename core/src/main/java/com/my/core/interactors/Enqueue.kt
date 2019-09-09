@@ -1,10 +1,10 @@
 package com.my.core.interactors
 
-import com.my.core.data.JourneyPlannerRepository
-import com.my.core.domain.JourneyPlanner
+import com.my.core.data.IJourneyPlannerRepository
+import com.my.core.domain.JourneyPlannerResult
 import retrofit2.Call
 
-class Enqueue(private val journeyPlannerRepository: JourneyPlannerRepository) {
-    operator fun invoke(call: Call<JourneyPlanner.ItineraryResult>) =
+class Enqueue(private val journeyPlannerRepository: IJourneyPlannerRepository) {
+    operator fun invoke(call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>) =
         journeyPlannerRepository.enqueue(call)
 }

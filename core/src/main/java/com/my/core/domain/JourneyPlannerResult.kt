@@ -1,7 +1,7 @@
 package com.my.core.domain
 
-sealed class JourneyPlanner {
-    data class NotIdentifiedResult(
+sealed class JourneyPlannerResult {
+    data class NotIdentified(
         val `$type`: String,
         val fromLocationDisambiguation: FromLocationDisambiguation,
         val journeyVector: JourneyVector,
@@ -9,7 +9,7 @@ sealed class JourneyPlanner {
         val searchCriteria: SearchCriteria,
         val toLocationDisambiguation: ToLocationDisambiguation,
         val viaLocationDisambiguation: ViaLocationDisambiguation
-    ) : JourneyPlanner() {
+    ) : JourneyPlannerResult() {
         data class ToLocationDisambiguation(
             val `$type`: String,
             val matchStatus: String
@@ -40,7 +40,7 @@ sealed class JourneyPlanner {
         )
     }
 
-    data class ItineraryResult(
+    data class Itinerary(
         val `$type`: String,
         val journeyVector: JourneyVector,
         val journeys: List<Journey>,
@@ -48,7 +48,7 @@ sealed class JourneyPlanner {
         val recommendedMaxAgeMinutes: Int,
         val searchCriteria: SearchCriteria,
         val stopMessages: List<Any>
-    ) : JourneyPlanner() {
+    ) : JourneyPlannerResult() {
         data class SearchCriteria(
             val `$type`: String,
             val dateTime: String,
@@ -279,7 +279,7 @@ sealed class JourneyPlanner {
         }
     }
 
-    data class DisambiguationResult(
+    data class FromAndToDisambiguationOptions(
         val fromLocationDisambiguation: FromLocationDisambiguation,
         val journeyVector: JourneyVector,
         val recommendedMaxAgeMinutes: Int,
@@ -287,7 +287,7 @@ sealed class JourneyPlanner {
         val toLocationDisambiguation: ToLocationDisambiguation,
         val type: String,
         val viaLocationDisambiguation: ViaLocationDisambiguation
-    ) : JourneyPlanner() {
+    ) : JourneyPlannerResult() {
         data class ViaLocationDisambiguation(
             val matchStatus: String,
             val type: String
@@ -357,6 +357,126 @@ sealed class JourneyPlanner {
             val type: String,
             val uri: String,
             val via: String
+        )
+    }
+
+    data class FromDisambiguationOptions(
+        val `$type`: String,
+        val fromLocationDisambiguation: FromLocationDisambiguation,
+        val journeyVector: JourneyVector,
+        val recommendedMaxAgeMinutes: Int,
+        val searchCriteria: SearchCriteria,
+        val toLocationDisambiguation: ToLocationDisambiguation,
+        val viaLocationDisambiguation: ViaLocationDisambiguation
+    ) {
+        data class ToLocationDisambiguation(
+            val `$type`: String,
+            val matchStatus: String
+        )
+
+        data class ViaLocationDisambiguation(
+            val `$type`: String,
+            val matchStatus: String
+        )
+
+        data class JourneyVector(
+            val `$type`: String,
+            val from: String,
+            val to: String,
+            val uri: String,
+            val via: String
+        )
+
+        data class FromLocationDisambiguation(
+            val `$type`: String,
+            val disambiguationOptions: List<DisambiguationOption>,
+            val matchStatus: String
+        ) {
+            data class DisambiguationOption(
+                val `$type`: String,
+                val matchQuality: Int,
+                val parameterValue: String,
+                val place: Place,
+                val uri: String
+            ) {
+                data class Place(
+                    val `$type`: String,
+                    val additionalProperties: List<Any>,
+                    val commonName: String,
+                    val icsCode: String,
+                    val lat: Double,
+                    val lon: Double,
+                    val modes: List<String>,
+                    val naptanId: String,
+                    val placeType: String,
+                    val stopType: String,
+                    val url: String
+                )
+            }
+        }
+
+        data class SearchCriteria(
+            val `$type`: String,
+            val dateTime: String,
+            val dateTimeType: String
+        )
+    }
+
+    data class ToDisambiguationOptions(
+        val `$type`: String,
+        val fromLocationDisambiguation: FromLocationDisambiguation,
+        val journeyVector: JourneyVector,
+        val recommendedMaxAgeMinutes: Int,
+        val searchCriteria: SearchCriteria,
+        val toLocationDisambiguation: ToLocationDisambiguation,
+        val viaLocationDisambiguation: ViaLocationDisambiguation
+    ) {
+        data class JourneyVector(
+            val `$type`: String,
+            val from: String,
+            val to: String,
+            val uri: String,
+            val via: String
+        )
+
+        data class ViaLocationDisambiguation(
+            val `$type`: String,
+            val matchStatus: String
+        )
+
+        data class ToLocationDisambiguation(
+            val `$type`: String,
+            val disambiguationOptions: List<DisambiguationOption>,
+            val matchStatus: String
+        ) {
+            data class DisambiguationOption(
+                val `$type`: String,
+                val matchQuality: Int,
+                val parameterValue: String,
+                val place: Place,
+                val uri: String
+            ) {
+                data class Place(
+                    val `$type`: String,
+                    val additionalProperties: List<Any>,
+                    val commonName: String,
+                    val lat: Double,
+                    val lon: Double,
+                    val placeType: String,
+                    val url: String
+                )
+            }
+        }
+
+        data class FromLocationDisambiguation(
+            val `$type`: String,
+            val matchStatus: String
+        )
+
+        data class SearchCriteria(
+            val `$type`: String,
+            val dateTime: String,
+            val dateTimeType: String
         )
     }
 }

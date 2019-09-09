@@ -6,24 +6,20 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.my.core.data.JourneyPlannerRepository
-import com.my.core.interactors.BuildMockRetrofit
 import com.my.core.interactors.CancelAsyncCall
 import com.my.core.interactors.Enqueue
 import com.my.core.interactors.GetJourneyResults
 import com.my.journeyplanner.framework.Interactors
-import com.my.journeyplanner.framework.JourneyPlannerDataSource
+import com.my.journeyplanner.framework.JourneyPlannerRepository
 import com.my.journeyplanner.presenters.MainPresenter
 import com.my.journeyplanner.views.main.MainContract
 
 class MainActivity : AppCompatActivity(), MainContract.View {
-    private val journeyPlannerRepository = JourneyPlannerRepository(JourneyPlannerDataSource())
-
+    private val journeyPlannerRepository = JourneyPlannerRepository()
     private val interactors = Interactors(
         GetJourneyResults(journeyPlannerRepository),
         Enqueue(journeyPlannerRepository),
-        CancelAsyncCall(journeyPlannerRepository),
-        BuildMockRetrofit(journeyPlannerRepository)
+        CancelAsyncCall(journeyPlannerRepository)
     )
 
     private val mainPresenter by lazy { MainPresenter(this, interactors) }

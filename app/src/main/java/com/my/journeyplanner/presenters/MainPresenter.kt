@@ -1,13 +1,13 @@
 package com.my.journeyplanner.presenters
 
-import com.my.core.domain.JourneyPlanner
+import com.my.core.domain.JourneyPlannerResult
 import com.my.journeyplanner.framework.Interactors
 import com.my.journeyplanner.views.main.MainContract
 import retrofit2.Call
 
 class MainPresenter(private val view: MainContract.View, private val interactors: Interactors) :
     MainContract.Presenter {
-    private var call: Call<JourneyPlanner.ItineraryResult>? = null
+    private var call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>? = null
 
     override fun onChangeTimeClicked() {
 

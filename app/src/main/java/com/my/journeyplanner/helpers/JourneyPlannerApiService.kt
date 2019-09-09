@@ -1,13 +1,12 @@
 package com.my.journeyplanner.helpers
 
-import com.my.core.domain.JourneyPlanner
-import com.my.journeyplanner.helpers.interceptors.MockInterceptor
+import com.my.core.domain.JourneyPlannerResult
+import com.my.journeyplanner.framework.JourneyPlannerResultConverterFactory
 import com.my.journeyplanner.helpers.interceptors.MultiOptionResponseCodeInterceptor
 import com.my.journeyplanner.helpers.interceptors.ParametersInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -16,7 +15,7 @@ interface JourneyPlannerApiService {
     fun getJourneyResults(
         @Path("fromLocation") fromLocation: String,
         @Path("toLocation") toLocation: String
-    ): Call<JourneyPlanner.ItineraryResult>
+    ): Call<JourneyPlannerResult.FromAndToDisambiguationOptions>
 
     companion object {
         private const val TFL_API_BASE_URL = "https://api.tfl.gov.uk/"
@@ -25,17 +24,13 @@ interface JourneyPlannerApiService {
             .addInterceptor(MultiOptionResponseCodeInterceptor())
             .build()
 
-        val mockRetrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://mockurl.com/")
-            .client(OkHttpClient().newBuilder().addInterceptor(MockInterceptor()).build())
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-
         fun createApiService(): JourneyPlannerApiService =
             Retrofit.Builder()
                 .baseUrl(TFL_API_BASE_URL)
                 .client(client)
-                .addConverterFactory(MoshiConverterFactory.create())
+//                    TODO("Remove")
+//                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(JourneyPlannerResultConverterFactory())
                 .build().create(JourneyPlannerApiService::class.java)
     }
 }
