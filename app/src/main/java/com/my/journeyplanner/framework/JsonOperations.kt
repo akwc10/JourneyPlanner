@@ -22,7 +22,7 @@ fun isItineraryResult(jsonBody: JSONObject): Boolean {
             ) return true
         }
     } catch (e: JSONException) {
-        Log.e(JourneyPlannerResultConverterFactory.TAG, e.message)
+        Log.e(TAG, e.message)
     }
     return false
 }
