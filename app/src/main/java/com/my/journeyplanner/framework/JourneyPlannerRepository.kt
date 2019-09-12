@@ -13,26 +13,26 @@ class JourneyPlannerRepository : IJourneyPlannerRepository {
     override fun getJourneyResults(
         fromLocation: String,
         toLocation: String
-    ): Call<JourneyPlannerResult.FromAndToDisambiguationOptions> =
+    ): Call<JourneyPlannerResult> =
         JourneyPlannerApiService.createApiService().getJourneyResults(fromLocation, toLocation)
 
-    override fun enqueue(call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>) {
-        call.enqueue(object : Callback<JourneyPlannerResult.FromAndToDisambiguationOptions> {
+    override fun enqueue(call: Call<JourneyPlannerResult>) {
+        call.enqueue(object : Callback<JourneyPlannerResult> {
 
             override fun onFailure(
-                call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>,
+                call: Call<JourneyPlannerResult>,
                 throwable: Throwable
             ) {
                 if (throwable is IOException) {
-                    Log.d(TAG, "Network failure")
+                    Log.e(TAG, "Network failure", throwable)
                 } else {
-                    Log.d(TAG, "Conversion failure")
+                    Log.e(TAG, "Conversion failure", throwable)
                 }
             }
 
             override fun onResponse(
-                call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>,
-                response: Response<JourneyPlannerResult.FromAndToDisambiguationOptions>
+                call: Call<JourneyPlannerResult>,
+                response: Response<JourneyPlannerResult>
             ) {
                 if (response.isSuccessful) {
                     Log.d(TAG, "raw(): ${response.raw()}")
@@ -46,7 +46,7 @@ class JourneyPlannerRepository : IJourneyPlannerRepository {
         })
     }
 
-    override fun cancelAsyncCall(call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>?) {
+    override fun cancelAsyncCall(call: Call<JourneyPlannerResult>?) {
         call?.cancel()
     }
 

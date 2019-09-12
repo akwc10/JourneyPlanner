@@ -5,6 +5,6 @@ import com.my.core.domain.JourneyPlannerResult
 import retrofit2.Call
 
 class Enqueue(private val journeyPlannerRepository: IJourneyPlannerRepository) {
-    operator fun invoke(call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>) =
+    operator fun invoke(call: Call<JourneyPlannerResult>) =
         journeyPlannerRepository.enqueue(call)
 }

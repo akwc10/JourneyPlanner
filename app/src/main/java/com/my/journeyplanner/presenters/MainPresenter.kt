@@ -7,7 +7,7 @@ import retrofit2.Call
 
 class MainPresenter(private val view: MainContract.View, private val interactors: Interactors) :
     MainContract.Presenter {
-    private var call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>? = null
+    private var call: Call<JourneyPlannerResult>? = null
 
     override fun onChangeTimeClicked() {
 

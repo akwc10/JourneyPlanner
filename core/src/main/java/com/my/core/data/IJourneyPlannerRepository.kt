@@ -7,9 +7,9 @@ interface IJourneyPlannerRepository {
     fun getJourneyResults(
         fromLocation: String,
         toLocation: String
-    ): Call<JourneyPlannerResult.FromAndToDisambiguationOptions>
+    ): Call<JourneyPlannerResult>
 
-    fun enqueue(call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>)
+    fun enqueue(call: Call<JourneyPlannerResult>)
 
-    fun cancelAsyncCall(call: Call<JourneyPlannerResult.FromAndToDisambiguationOptions>?)
+    fun cancelAsyncCall(call: Call<JourneyPlannerResult>?)
 }

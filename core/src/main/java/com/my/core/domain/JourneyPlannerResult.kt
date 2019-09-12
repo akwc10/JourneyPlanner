@@ -368,7 +368,7 @@ sealed class JourneyPlannerResult {
         val searchCriteria: SearchCriteria,
         val toLocationDisambiguation: ToLocationDisambiguation,
         val viaLocationDisambiguation: ViaLocationDisambiguation
-    ) {
+    ) : JourneyPlannerResult() {
         data class ToLocationDisambiguation(
             val `$type`: String,
             val matchStatus: String
@@ -430,7 +430,7 @@ sealed class JourneyPlannerResult {
         val searchCriteria: SearchCriteria,
         val toLocationDisambiguation: ToLocationDisambiguation,
         val viaLocationDisambiguation: ViaLocationDisambiguation
-    ) {
+    ) : JourneyPlannerResult() {
         data class JourneyVector(
             val `$type`: String,
             val from: String,
