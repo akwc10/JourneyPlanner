@@ -56,33 +56,29 @@ class JourneyPlannerResultConverterFactory : Converter.Factory() {
             val hasFromLocationDisambiguation = jsonBody.has(FROM_LOCATION_DISAMBIGUATION)
             val hasToLocationDisambiguation = jsonBody.has(TO_LOCATION_DISAMBIGUATION)
             val hasFromLocationDisambiguationMatchStatus =
-                hasLocationDisambiguationKey(
+                jsonBody.hasLocationDisambiguationKey(
                     hasFromLocationDisambiguation,
-                    jsonBody,
                     FROM_LOCATION_DISAMBIGUATION,
                     MATCH_STATUS
                 )
             val hasToLocationDisambiguationMatchStatus =
-                hasLocationDisambiguationKey(
+                jsonBody.hasLocationDisambiguationKey(
                     hasToLocationDisambiguation,
-                    jsonBody,
                     TO_LOCATION_DISAMBIGUATION,
                     MATCH_STATUS
                 )
             val isNotIdentified =
                 hasFromLocationDisambiguationMatchStatus && hasToLocationDisambiguationMatchStatus
-            val isItineraryResult = isItineraryResult(jsonBody)
+            val isItineraryResult = jsonBody.isItineraryResult()
             val hasFromLocationDisambiguationOptions =
-                hasLocationDisambiguationKey(
+                jsonBody.hasLocationDisambiguationKey(
                     hasFromLocationDisambiguation,
-                    jsonBody,
                     FROM_LOCATION_DISAMBIGUATION,
                     DISAMBIGUATION_OPTIONS
                 )
             val hasToLocationDisambiguationOptions =
-                hasLocationDisambiguationKey(
+                jsonBody.hasLocationDisambiguationKey(
                     hasToLocationDisambiguation,
-                    jsonBody,
                     TO_LOCATION_DISAMBIGUATION,
                     DISAMBIGUATION_OPTIONS
                 )

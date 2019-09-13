@@ -23,11 +23,11 @@ class JourneyPlannerRepository : IJourneyPlannerRepository {
                 call: Call<JourneyPlannerResult>,
                 throwable: Throwable
             ) {
-                if (throwable is IOException) {
-                    Log.e(TAG, "Network failure", throwable)
-                } else {
-                    Log.e(TAG, "Conversion failure", throwable)
-                }
+                Log.e(
+                    TAG,
+                    if (throwable is IOException) "Network failure" else "Conversion failure",
+                    throwable
+                )
             }
 
             override fun onResponse(

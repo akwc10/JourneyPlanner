@@ -7,19 +7,18 @@ import org.json.JSONObject
 const val TAG = "JsonOperations"
 const val TYPE = "\$type"
 const val ITINERARY_RESULT = "ItineraryResult"
-const val DISAMBIGUATION_OPTIONS = "DisambiguationOptions"
+const val DISAMBIGUATION_OPTIONS = "disambiguationOptions"
 const val FROM_LOCATION_DISAMBIGUATION = "fromLocationDisambiguation"
 const val TO_LOCATION_DISAMBIGUATION = "toLocationDisambiguation"
 const val MATCH_STATUS = "matchStatus"
 const val NOT_IDENTIFIED = "notidentified"
 
-fun isItineraryResult(jsonBody: JSONObject): Boolean {
+fun JSONObject.isItineraryResult(): Boolean {
     try {
-        if (jsonBody.has(TYPE)) {
-            if (jsonBody.getString(TYPE).contains(
-                    ITINERARY_RESULT
-                )
-            ) return true
+        if (this.has(TYPE)) {
+            if (this.getString(TYPE).contains(ITINERARY_RESULT)) return true
+        } else {
+            Log.d(TAG, "Missing key: $TYPE")
         }
     } catch (e: JSONException) {
         Log.e(TAG, e.message)
@@ -27,29 +26,30 @@ fun isItineraryResult(jsonBody: JSONObject): Boolean {
     return false
 }
 
-fun hasLocationDisambiguationKey(
+fun JSONObject.hasLocationDisambiguationKey(
     hasLocationDisambiguation: Boolean,
-    jsonBody: JSONObject,
     locationDisambiguation: String,
     key: String
 ): Boolean {
     try {
         if (hasLocationDisambiguation) {
-            if (jsonBody.getJSONObject(locationDisambiguation).has(key)) {
+            if (this.getJSONObject(locationDisambiguation).has(key)) {
                 when (key) {
                     DISAMBIGUATION_OPTIONS -> {
-                        if (jsonBody.getJSONObject(locationDisambiguation).getJSONArray(
+                        if (this.getJSONObject(locationDisambiguation).getJSONArray(
                                 key
                             ).length() > 0
                         ) return true
                     }
                     MATCH_STATUS -> {
-                        if (jsonBody.getJSONObject(locationDisambiguation).getString(
+                        if (this.getJSONObject(locationDisambiguation).getString(
                                 key
                             ) == NOT_IDENTIFIED
                         ) return true
                     }
                 }
+            } else {
+                Log.d(TAG, "Missing key: $locationDisambiguation.$key")
             }
         }
     } catch (e: JSONException) {
