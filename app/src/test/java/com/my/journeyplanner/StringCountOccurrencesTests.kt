@@ -1,6 +1,6 @@
 package com.my.journeyplanner
 
-import com.my.journeyplanner.helpers.countOccurrences
+import com.my.journeyplanner.features.searchquery.framework.helpers.countOccurrences
 import org.junit.Assert
 import org.junit.Test
 
