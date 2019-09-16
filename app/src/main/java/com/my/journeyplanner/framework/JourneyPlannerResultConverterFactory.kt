@@ -1,6 +1,5 @@
 package com.my.journeyplanner.framework
 
-import android.util.Log
 import com.my.core.domain.JourneyPlannerResult
 import okhttp3.ResponseBody
 import org.json.JSONObject
@@ -14,8 +13,6 @@ class JourneyPlannerResultConverterFactory : Converter.Factory() {
         annotations: Array<Annotation>,
         retrofit: Retrofit
     ): Converter<ResponseBody, JourneyPlannerResult> {
-        Log.d(TAG, "responseBodyConverter() params: ${type}, ${annotations.size}, $retrofit")
-
         val itineraryConverterFactory =
             retrofit.nextResponseBodyConverter<JourneyPlannerResult.Itinerary>(
                 this,
@@ -23,91 +20,26 @@ class JourneyPlannerResultConverterFactory : Converter.Factory() {
                 annotations
             )
         val fromAndToDisambiguationOptionsConverterFactory =
-            retrofit.nextResponseBodyConverter<JourneyPlannerResult.FromAndToDisambiguationOptions>(
+            retrofit.nextResponseBodyConverter<JourneyPlannerResult.FromToDisambiguationOptions>(
                 this,
-                JourneyPlannerResult.FromAndToDisambiguationOptions::class.java,
-                annotations
-            )
-
-        val notIdentifiedConverterFactory =
-            retrofit.nextResponseBodyConverter<JourneyPlannerResult.NotIdentified>(
-                this,
-                JourneyPlannerResult.NotIdentified::class.java,
-                annotations
-            )
-
-        val fromDisambiguationOptionsConverterFactory =
-            retrofit.nextResponseBodyConverter<JourneyPlannerResult.FromDisambiguationOptions>(
-                this,
-                JourneyPlannerResult.FromDisambiguationOptions::class.java,
-                annotations
-            )
-
-        val toDisambiguationOptionsConverterFactory =
-            retrofit.nextResponseBodyConverter<JourneyPlannerResult.ToDisambiguationOptions>(
-                this,
-                JourneyPlannerResult.ToDisambiguationOptions::class.java,
+                JourneyPlannerResult.FromToDisambiguationOptions::class.java,
                 annotations
             )
 
         return Converter { body ->
             val bodyString = body.string()
             val jsonBody = JSONObject(bodyString)
-            val hasFromLocationDisambiguation = jsonBody.has(FROM_LOCATION_DISAMBIGUATION)
-            val hasToLocationDisambiguation = jsonBody.has(TO_LOCATION_DISAMBIGUATION)
-            val hasFromLocationDisambiguationMatchStatus =
-                jsonBody.hasLocationDisambiguationKey(
-                    hasFromLocationDisambiguation,
-                    FROM_LOCATION_DISAMBIGUATION,
-                    MATCH_STATUS
-                )
-            val hasToLocationDisambiguationMatchStatus =
-                jsonBody.hasLocationDisambiguationKey(
-                    hasToLocationDisambiguation,
-                    TO_LOCATION_DISAMBIGUATION,
-                    MATCH_STATUS
-                )
-            val isNotIdentified =
-                hasFromLocationDisambiguationMatchStatus && hasToLocationDisambiguationMatchStatus
-            val isItineraryResult = jsonBody.isItineraryResult()
-            val hasFromLocationDisambiguationOptions =
-                jsonBody.hasLocationDisambiguationKey(
-                    hasFromLocationDisambiguation,
-                    FROM_LOCATION_DISAMBIGUATION,
-                    DISAMBIGUATION_OPTIONS
-                )
-            val hasToLocationDisambiguationOptions =
-                jsonBody.hasLocationDisambiguationKey(
-                    hasToLocationDisambiguation,
-                    TO_LOCATION_DISAMBIGUATION,
-                    DISAMBIGUATION_OPTIONS
-                )
-            val isFromAndToLocationDisambiguationOptions =
-                hasFromLocationDisambiguationOptions && hasToLocationDisambiguationOptions
-            val isFromDisambiguationOptions =
-                hasFromLocationDisambiguationOptions && !hasToLocationDisambiguationOptions
-            val isToDisambiguationOptions =
-                !hasFromLocationDisambiguationOptions && hasToLocationDisambiguationOptions
+            val isItineraryResult = jsonBody.isResultType(ITINERARY_RESULT)
+            val isDisambiguationResult = jsonBody.isResultType(DISAMBIGUATION_RESULT)
             val bodyClone = ResponseBody.create(body.contentType(), bodyString)
 
             when {
-                isNotIdentified -> notIdentifiedConverterFactory.convert(bodyClone)
                 isItineraryResult -> itineraryConverterFactory.convert(bodyClone)
-                isFromAndToLocationDisambiguationOptions -> fromAndToDisambiguationOptionsConverterFactory.convert(
-                    bodyClone
-                )
-                isFromDisambiguationOptions -> fromDisambiguationOptionsConverterFactory.convert(
-                    bodyClone
-                )
-                isToDisambiguationOptions -> toDisambiguationOptionsConverterFactory.convert(
+                isDisambiguationResult -> fromAndToDisambiguationOptionsConverterFactory.convert(
                     bodyClone
                 )
                 else -> throw IllegalStateException()
             }
         }
-    }
-
-    companion object {
-        val TAG = this::class.java.simpleName as String
     }
 }
