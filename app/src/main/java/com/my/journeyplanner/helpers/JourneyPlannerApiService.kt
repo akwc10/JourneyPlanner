@@ -1,6 +1,9 @@
 package com.my.journeyplanner.helpers
 
-import com.my.journeyplanner.models.JourneyPlannerDisambiguationResult
+import com.my.core.domain.JourneyPlannerResult
+import com.my.journeyplanner.framework.JourneyPlannerResultConverterFactory
+import com.my.journeyplanner.helpers.interceptors.MultiOptionResponseCodeInterceptor
+import com.my.journeyplanner.helpers.interceptors.ParametersInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -13,16 +16,21 @@ interface JourneyPlannerApiService {
     fun getJourneyResults(
         @Path("fromLocation") fromLocation: String,
         @Path("toLocation") toLocation: String
-    ): Call<JourneyPlannerDisambiguationResult>
+    ): Call<JourneyPlannerResult>
 
     companion object {
         private const val TFL_API_BASE_URL = "https://api.tfl.gov.uk/"
-        private val client = OkHttpClient().newBuilder().addInterceptor(ParametersInterceptor()).build()
+        private val client = OkHttpClient().newBuilder()
+            .addInterceptor(ParametersInterceptor())
+            .addInterceptor(MultiOptionResponseCodeInterceptor())
+            .build()
 
-        fun createApiService(): JourneyPlannerApiService = Retrofit.Builder()
-            .baseUrl(TFL_API_BASE_URL)
-            .client(client)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build().create(JourneyPlannerApiService::class.java)
+        fun createApiService(): JourneyPlannerApiService =
+            Retrofit.Builder()
+                .baseUrl(TFL_API_BASE_URL)
+                .client(client)
+                .addConverterFactory(JourneyPlannerResultConverterFactory())
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build().create(JourneyPlannerApiService::class.java)
     }
 }

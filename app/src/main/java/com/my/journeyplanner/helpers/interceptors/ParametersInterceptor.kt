@@ -1,4 +1,4 @@
-package com.my.journeyplanner.helpers
+package com.my.journeyplanner.helpers.interceptors
 
 import com.my.journeyplanner.TFL_API_APP_ID
 import com.my.journeyplanner.TFL_API_APP_KEY
