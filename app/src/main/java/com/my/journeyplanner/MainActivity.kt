@@ -11,7 +11,7 @@ import com.my.core.interactors.Enqueue
 import com.my.core.interactors.GetJourneyResults
 import com.my.journeyplanner.framework.Interactors
 import com.my.journeyplanner.framework.JourneyPlannerRepository
-import com.my.journeyplanner.presenters.MainPresenter
+import com.my.journeyplanner.presenters.main.MainPresenter
 import com.my.journeyplanner.views.main.MainContract
 
 class MainActivity : AppCompatActivity(), MainContract.View {

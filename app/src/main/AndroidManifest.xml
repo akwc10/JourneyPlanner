@@ -11,6 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".views.itineraryresults.ItineraryResultsActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -22,6 +26,7 @@
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <dist:module dist:instant="true" />
 
 </manifest>

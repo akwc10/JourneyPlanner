@@ -1,4 +1,4 @@
-package com.my.journeyplanner.presenters
+package com.my.journeyplanner.presenters.main
 
 import com.my.core.domain.JourneyPlannerResult
 import com.my.journeyplanner.framework.Interactors
