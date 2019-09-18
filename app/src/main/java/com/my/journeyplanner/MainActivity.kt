@@ -1,5 +1,6 @@
 package com.my.journeyplanner
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
@@ -12,10 +13,16 @@ import com.my.core.interactors.GetJourneyResults
 import com.my.journeyplanner.framework.Interactors
 import com.my.journeyplanner.framework.JourneyPlannerRepository
 import com.my.journeyplanner.presenters.main.MainPresenter
+import com.my.journeyplanner.views.itineraryresults.ItineraryResultsActivity
 import com.my.journeyplanner.views.main.MainContract
 
+const val EXTRA_JOURNEY_PLANNER_RESULT = "com.my.journeyplanner.JOURNEY_PLANNER_RESULT"
+
 class MainActivity : AppCompatActivity(), MainContract.View {
-    private val journeyPlannerRepository = JourneyPlannerRepository()
+
+    //    TODO("Solve cyclical referencing")
+    private val journeyPlannerRepository = JourneyPlannerRepository(mainPresenter)
+
     private val interactors = Interactors(
         GetJourneyResults(journeyPlannerRepository),
         Enqueue(journeyPlannerRepository),
@@ -50,6 +57,12 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     override fun getFromLocation(): EditText = editTextFromLocation
 
     override fun getToLocation(): EditText = editTextToLocation
+
+    override fun showItineraryResultActivity() {
+        startActivity(Intent(this, ItineraryResultsActivity::class.java))
+//        TODO("Why not conforming to Serializable?")
+//            .putExtra(EXTRA_JOURNEY_PLANNER_RESULT, mainPresenter.getJourneyPlannerResult()))
+    }
 
     private fun addEditTextToListener() {
         editTextToLocation.setOnEditorActionListener { _, actionId, event ->

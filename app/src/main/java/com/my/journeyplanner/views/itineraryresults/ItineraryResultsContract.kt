@@ -15,6 +15,6 @@ class ItineraryResultsContract {
         fun onAddFavouritesClicked(details: Any)
         fun onViewDetailedClicked(details: Any)
         fun onMapViewClicked(details: Any)
-        fun omSaveJourneyClicked()
+        fun onSaveJourneyClicked()
     }
 }

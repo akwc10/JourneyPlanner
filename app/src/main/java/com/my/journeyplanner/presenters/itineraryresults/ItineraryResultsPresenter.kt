@@ -18,7 +18,7 @@ class ItineraryResultsPresenter(
 
     }
 
-    override fun omSaveJourneyClicked() {
+    override fun onSaveJourneyClicked() {
 
     }
 }
