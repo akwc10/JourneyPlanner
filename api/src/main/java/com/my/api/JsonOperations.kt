@@ -1,4 +1,4 @@
-package com.my.journeyplanner.framework
+package com.my.api
 
 import org.json.JSONObject
 

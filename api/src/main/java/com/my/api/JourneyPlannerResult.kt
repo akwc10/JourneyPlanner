@@ -1,4 +1,4 @@
-package com.my.core.domain
+package com.my.api
 
 import java.io.Serializable
 

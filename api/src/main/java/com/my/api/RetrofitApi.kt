@@ -1,17 +1,18 @@
-package com.my.journeyplanner.framework
+package com.my.api
 
-import android.util.Log
-import com.my.core.data.IJourneyPlannerRepository
-import com.my.core.domain.JourneyPlannerResult
-import com.my.journeyplanner.helpers.JourneyPlannerApiService
-import com.my.journeyplanner.presenters.main.MainPresenter
+import com.my.core.domain.JourneyPlannerResultDomainModel
+import mu.KotlinLogging
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class JourneyPlannerRepository(private val mainPresenter: MainPresenter) :
-    IJourneyPlannerRepository {
+private val logger = KotlinLogging.logger {}
+
+class RetrofitApi : IRetrofitApi {
+    var mResponse: JourneyPlannerResult? = null
+    var mJourneyPlannerResultDomainModel: JourneyPlannerResultDomainModel? = null
+
     override fun getJourneyResults(
         fromLocation: String,
         toLocation: String
@@ -25,7 +26,7 @@ class JourneyPlannerRepository(private val mainPresenter: MainPresenter) :
                 call: Call<JourneyPlannerResult>,
                 throwable: Throwable
             ) {
-                Log.e(
+                logger.error(
                     TAG,
                     if (throwable is IOException) "Network failure" else "Conversion failure",
                     throwable
@@ -39,20 +40,28 @@ class JourneyPlannerRepository(private val mainPresenter: MainPresenter) :
                 if (response.isSuccessful) {
                     val responseBodyString = response.body().toString()
 
-                    Log.d(TAG, "raw(): ${response.raw()}")
-                    Log.d(TAG, "body(): $responseBodyString")
+                    logger.debug { "headers(): ${response.headers()}" }
+                    logger.debug { "raw(): ${response.raw()}" }
+                    logger.debug { "body(): $responseBodyString" }
 
-                    mainPresenter.updateJourneyPlannerResult(response.body())
-                    when {
-                        responseBodyString.contains(ITINERARY_RESULT) ->
-                            mainPresenter.updateJourneyPlannerResultType(JourneyPlannerResultType.ITINERARY_RESULT)
-                        responseBodyString.contains(DISAMBIGUATION_OPTIONS) ->
-                            mainPresenter.updateJourneyPlannerResultType(JourneyPlannerResultType.DISAMBIGUATION_RESULT)
+                    mResponse = response.body()
+                    mJourneyPlannerResultDomainModel = when {
+                        responseBodyString.contains(ITINERARY_RESULT) -> parseItineraryTO(response)
+
+                        responseBodyString.contains(DISAMBIGUATION_OPTIONS) -> {
+//                            TODO("as above")
+                            null
+                        }
                         else -> throw IllegalStateException()
                     }
+                    logger.debug(
+                        TAG,
+                        "journeyPlannerResultDomainModel: $mJourneyPlannerResultDomainModel"
+                    )
                 } else {
-                    Log.d(TAG, "responseCode: ${response.code()}")
+                    logger.debug(TAG, "responseCode: ${response.code()}")
                 }
+
 
             }
         })
@@ -63,6 +72,6 @@ class JourneyPlannerRepository(private val mainPresenter: MainPresenter) :
     }
 
     companion object {
-        val TAG = this::class.java.simpleName as String
+        val TAG = this::class.java.simpleName
     }
 }

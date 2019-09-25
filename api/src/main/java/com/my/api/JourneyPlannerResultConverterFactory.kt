@@ -1,6 +1,5 @@
-package com.my.journeyplanner.framework
+package com.my.api
 
-import com.my.core.domain.JourneyPlannerResult
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Converter

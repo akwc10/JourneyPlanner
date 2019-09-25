@@ -7,11 +7,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import com.my.core.interactors.CancelAsyncCall
-import com.my.core.interactors.Enqueue
-import com.my.core.interactors.GetJourneyResults
-import com.my.journeyplanner.framework.Interactors
-import com.my.journeyplanner.framework.JourneyPlannerRepository
+import com.my.api.RetrofitApi
 import com.my.journeyplanner.presenters.main.MainPresenter
 import com.my.journeyplanner.views.itineraryresults.ItineraryResultsActivity
 import com.my.journeyplanner.views.main.MainContract
@@ -20,16 +16,9 @@ const val EXTRA_JOURNEY_PLANNER_RESULT = "com.my.journeyplanner.JOURNEY_PLANNER_
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
-    //    TODO("Solve cyclical referencing")
-    private val journeyPlannerRepository = JourneyPlannerRepository(mainPresenter)
+    private val retrofitApi = RetrofitApi()
 
-    private val interactors = Interactors(
-        GetJourneyResults(journeyPlannerRepository),
-        Enqueue(journeyPlannerRepository),
-        CancelAsyncCall(journeyPlannerRepository)
-    )
-
-    private val mainPresenter by lazy { MainPresenter(this, interactors) }
+    private val mainPresenter by lazy { MainPresenter(this, retrofitApi) }
 
     private val editTextFromLocation by lazy { findViewById<EditText>(R.id.editTextFromLocation) }
     private val editTextToLocation by lazy { findViewById<EditText>(R.id.editTextToLocation) }

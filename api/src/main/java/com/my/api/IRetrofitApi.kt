@@ -1,9 +1,8 @@
-package com.my.core.data
+package com.my.api
 
-import com.my.core.domain.JourneyPlannerResult
 import retrofit2.Call
 
-interface IJourneyPlannerRepository {
+interface IRetrofitApi {
     fun getJourneyResults(
         fromLocation: String,
         toLocation: String
