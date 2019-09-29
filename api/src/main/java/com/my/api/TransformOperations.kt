@@ -4,7 +4,7 @@ import com.my.core.domain.JourneyPlannerResultDomainModel
 import org.threeten.bp.LocalDateTime
 import retrofit2.Response
 
-fun parseItineraryTO(response: Response<JourneyPlannerResult>): JourneyPlannerResultDomainModel.Itinerary {
+fun transformItineraryTO(response: Response<JourneyPlannerResult>): JourneyPlannerResultDomainModel.Itinerary {
     val itineraryResult = response.body() as JourneyPlannerResult.Itinerary
     val itineraryResultJourneyVector = itineraryResult.journeyVector
     val journeyVector = JourneyPlannerResultDomainModel.Itinerary.JourneyVector(
