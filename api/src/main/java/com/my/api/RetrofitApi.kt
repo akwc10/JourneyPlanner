@@ -10,8 +10,7 @@ import java.io.IOException
 private val logger = KotlinLogging.logger {}
 
 class RetrofitApi : IRetrofitApi {
-    var mResponse: JourneyPlannerResult? = null
-    var mJourneyPlannerResultDomainModel: JourneyPlannerResultDomainModel? = null
+    var journeyPlannerResultDomainModel: JourneyPlannerResultDomainModel? = null
 
     override fun getJourneyResults(
         fromLocation: String,
@@ -27,7 +26,6 @@ class RetrofitApi : IRetrofitApi {
                 throwable: Throwable
             ) {
                 logger.error(
-                    TAG,
                     if (throwable is IOException) "Network failure" else "Conversion failure",
                     throwable
                 )
@@ -39,30 +37,19 @@ class RetrofitApi : IRetrofitApi {
             ) {
                 if (response.isSuccessful) {
                     val responseBodyString = response.body().toString()
-
-                    logger.debug { "headers(): ${response.headers()}" }
-                    logger.debug { "raw(): ${response.raw()}" }
-                    logger.debug { "body(): $responseBodyString" }
-
-                    mResponse = response.body()
-                    mJourneyPlannerResultDomainModel = when {
-                        responseBodyString.contains(ITINERARY_RESULT) -> parseItineraryTO(response)
-
+                    journeyPlannerResultDomainModel = when {
+                        responseBodyString.contains(ITINERARY_RESULT) -> transformItineraryTO(
+                            response
+                        )
                         responseBodyString.contains(DISAMBIGUATION_OPTIONS) -> {
 //                            TODO("as above")
                             null
                         }
                         else -> throw IllegalStateException()
                     }
-                    logger.debug(
-                        TAG,
-                        "journeyPlannerResultDomainModel: $mJourneyPlannerResultDomainModel"
-                    )
                 } else {
-                    logger.debug(TAG, "responseCode: ${response.code()}")
+                    logger.info("responseCode: ${response.code()}")
                 }
-
-
             }
         })
     }
@@ -71,7 +58,6 @@ class RetrofitApi : IRetrofitApi {
         call?.cancel()
     }
 
-    companion object {
-        val TAG = this::class.java.simpleName
-    }
+    override fun getJourneyPlannerDomainModel(): JourneyPlannerResultDomainModel? =
+        journeyPlannerResultDomainModel
 }

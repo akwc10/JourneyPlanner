@@ -2,10 +2,12 @@ package com.my.journeyplanner
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.my.api.RetrofitApi
 import com.my.journeyplanner.presenters.main.MainPresenter
@@ -16,9 +18,7 @@ const val EXTRA_JOURNEY_PLANNER_RESULT = "com.my.journeyplanner.JOURNEY_PLANNER_
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
-    private val retrofitApi = RetrofitApi()
-
-    private val mainPresenter by lazy { MainPresenter(this, retrofitApi) }
+    private val mainPresenter by lazy { MainPresenter(this, RetrofitApi()) }
 
     private val editTextFromLocation by lazy { findViewById<EditText>(R.id.editTextFromLocation) }
     private val editTextToLocation by lazy { findViewById<EditText>(R.id.editTextToLocation) }
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val buttonEditPreferences by lazy { findViewById<Button>(R.id.buttonEditPreferences) }
     private val buttonPlanMyJourney by lazy { findViewById<Button>(R.id.buttonPlanMyJourney) }
     private val buttonMyJourneys by lazy { findViewById<Button>(R.id.buttonMyJourneys) }
+    private val textViewResult by lazy { findViewById<TextView>(R.id.textViewResult) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         editTextToLocation.setText("Liverpool Street Underground Station")
 //        editTextFromLocation.setText("bfdbfdbdfbfd")
 //        editTextToLocation.setText("bfdbfdbdfbfbd")
+        textViewResult.movementMethod = ScrollingMovementMethod()
     }
 
     override fun getFromLocation(): EditText = editTextFromLocation
@@ -51,6 +53,10 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         startActivity(Intent(this, ItineraryResultsActivity::class.java))
 //        TODO("Why not conforming to Serializable?")
 //            .putExtra(EXTRA_JOURNEY_PLANNER_RESULT, mainPresenter.getJourneyPlannerResult()))
+    }
+
+    override fun showResult(result: String) {
+        textViewResult.text = result
     }
 
     private fun addEditTextToListener() {

@@ -8,6 +8,7 @@ class MainContract {
         fun getFromLocation(): EditText
         fun getToLocation(): EditText
         fun showItineraryResultActivity()
+        fun showResult(result: String)
     }
 
     interface Presenter : BaseContract.Presenter<View> {
