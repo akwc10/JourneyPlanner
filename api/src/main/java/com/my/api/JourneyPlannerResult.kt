@@ -1,7 +1,5 @@
 package com.my.api
 
-import java.io.Serializable
-
 sealed class JourneyPlannerResult {
     data class Itinerary(
         val `$type`: String,
@@ -11,13 +9,13 @@ sealed class JourneyPlannerResult {
         val recommendedMaxAgeMinutes: Int,
         val searchCriteria: SearchCriteria,
         val stopMessages: List<Any>
-    ) : JourneyPlannerResult(), Serializable {
+    ) : JourneyPlannerResult() {
         data class SearchCriteria(
             val `$type`: String,
             val dateTime: String,
             val dateTimeType: String,
             val timeAdjustments: TimeAdjustments
-        ) : Serializable {
+        ) {
             data class TimeAdjustments(
                 val `$type`: String,
                 val earlier: Earlier,
@@ -31,7 +29,7 @@ sealed class JourneyPlannerResult {
                     val time: String,
                     val timeIs: String,
                     val uri: String
-                ) : Serializable
+                )
 
                 data class Earliest(
                     val `$type`: String,
@@ -39,7 +37,7 @@ sealed class JourneyPlannerResult {
                     val time: String,
                     val timeIs: String,
                     val uri: String
-                ) : Serializable
+                )
 
                 data class Later(
                     val `$type`: String,
@@ -47,7 +45,7 @@ sealed class JourneyPlannerResult {
                     val time: String,
                     val timeIs: String,
                     val uri: String
-                ) : Serializable
+                )
 
                 data class Earlier(
                     val `$type`: String,
@@ -55,7 +53,7 @@ sealed class JourneyPlannerResult {
                     val time: String,
                     val timeIs: String,
                     val uri: String
-                ) : Serializable
+                )
             }
         }
 
@@ -65,7 +63,7 @@ sealed class JourneyPlannerResult {
             val to: String,
             val uri: String,
             val via: String
-        ) : Serializable
+        )
 
         data class Line(
             val `$type`: String,
@@ -79,7 +77,7 @@ sealed class JourneyPlannerResult {
             val name: String,
             val routeSections: List<Any>,
             val serviceTypes: List<ServiceType>
-        ) : Serializable {
+        ) {
             data class LineStatus(
                 val `$type`: String,
                 val created: String,
@@ -87,17 +85,17 @@ sealed class JourneyPlannerResult {
                 val statusSeverity: Int,
                 val statusSeverityDescription: String,
                 val validityPeriods: List<Any>
-            ) : Serializable
+            )
 
             data class ServiceType(
                 val `$type`: String,
                 val name: String,
                 val uri: String
-            ) : Serializable
+            )
 
             data class Crowding(
                 val `$type`: String
-            ) : Serializable
+            )
         }
 
         data class Journey(
@@ -107,7 +105,7 @@ sealed class JourneyPlannerResult {
             val fare: Fare,
             val legs: List<Leg>,
             val startDateTime: String
-        ) : Serializable {
+        ) {
             data class Leg(
                 val `$type`: String,
                 val arrivalPoint: ArrivalPoint,
@@ -125,7 +123,7 @@ sealed class JourneyPlannerResult {
                 val path: Path,
                 val plannedWorks: List<Any>,
                 val routeOptions: List<RouteOption>
-            ) : Serializable {
+            ) {
                 data class DeparturePoint(
                     val `$type`: String,
                     val additionalProperties: List<Any>,
@@ -135,20 +133,20 @@ sealed class JourneyPlannerResult {
                     val lon: Double,
                     val placeType: String,
                     val platformName: String
-                ) : Serializable
+                )
 
                 data class RouteOption(
                     val `$type`: String,
                     val directions: List<String>,
                     val name: String
-                ) : Serializable
+                )
 
                 data class Path(
                     val `$type`: String,
                     val elevation: List<Any>,
                     val lineString: String,
                     val stopPoints: List<Any>
-                ) : Serializable
+                )
 
                 data class ArrivalPoint(
                     val `$type`: String,
@@ -159,7 +157,7 @@ sealed class JourneyPlannerResult {
                     val lon: Double,
                     val placeType: String,
                     val platformName: String
-                ) : Serializable
+                )
 
                 data class Mode(
                     val `$type`: String,
@@ -168,14 +166,14 @@ sealed class JourneyPlannerResult {
                     val routeType: String,
                     val status: String,
                     val type: String
-                ) : Serializable
+                )
 
                 data class Instruction(
                     val `$type`: String,
                     val detailed: String,
                     val steps: List<Step>,
                     val summary: String
-                ) : Serializable {
+                ) {
                     data class Step(
                         val `$type`: String,
                         val cumulativeDistance: Int,
@@ -191,10 +189,10 @@ sealed class JourneyPlannerResult {
                         val streetName: String,
                         val trackType: String,
                         val turnDirection: String
-                    ) : Serializable {
+                    ) {
                         data class PathAttribute(
                             val `$type`: String
-                        ) : Serializable
+                        )
                     }
                 }
             }
@@ -204,12 +202,12 @@ sealed class JourneyPlannerResult {
                 val caveats: List<Caveat>,
                 val fares: List<Fare>,
                 val totalCost: Int
-            ) : Serializable {
+            ) {
                 data class Caveat(
                     val `$type`: String,
                     val text: String,
                     val type: String
-                ) : Serializable
+                )
 
                 data class Fare(
                     val `$type`: String,
@@ -222,12 +220,12 @@ sealed class JourneyPlannerResult {
                     val offPeak: Int,
                     val peak: Int,
                     val taps: List<Tap>
-                ) : Serializable {
+                ) {
                     data class Tap(
                         val `$type`: String,
                         val atcoCode: String,
                         val tapDetails: TapDetails
-                    ) : Serializable {
+                    ) {
                         data class TapDetails(
                             val `$type`: String,
                             val hostDeviceType: String,
@@ -235,7 +233,7 @@ sealed class JourneyPlannerResult {
                             val nationalLocationCode: Int,
                             val tapTimestamp: String,
                             val validationType: String
-                        ) : Serializable
+                        )
                     }
                 }
             }
@@ -250,24 +248,24 @@ sealed class JourneyPlannerResult {
         val toLocationDisambiguation: ToLocationDisambiguation,
         val `$type`: String,
         val viaLocationDisambiguation: ViaLocationDisambiguation
-    ) : JourneyPlannerResult(), Serializable {
+    ) : JourneyPlannerResult() {
         data class ViaLocationDisambiguation(
             val matchStatus: String,
             val `$type`: String
-        ) : Serializable
+        )
 
         data class FromLocationDisambiguation(
             val disambiguationOptions: List<DisambiguationOption>?,
             val matchStatus: String,
             val `$type`: String
-        ) : Serializable {
+        ) {
             data class DisambiguationOption(
                 val matchQuality: Int,
                 val parameterValue: String,
                 val place: Place,
                 val `$type`: String,
                 val uri: String
-            ) : Serializable {
+            ) {
                 data class Place(
                     val additionalProperties: List<Any>,
                     val commonName: String,
@@ -280,7 +278,7 @@ sealed class JourneyPlannerResult {
                     val stopType: String,
                     val `$type`: String,
                     val url: String
-                ) : Serializable
+                )
             }
         }
 
@@ -288,20 +286,20 @@ sealed class JourneyPlannerResult {
             val dateTime: String,
             val dateTimeType: String,
             val `$type`: String
-        ) : Serializable
+        )
 
         data class ToLocationDisambiguation(
             val disambiguationOptions: List<DisambiguationOption>?,
             val matchStatus: String,
             val `$type`: String
-        ) : Serializable {
+        ) {
             data class DisambiguationOption(
                 val matchQuality: Int,
                 val parameterValue: String,
                 val place: Place,
                 val `$type`: String,
                 val uri: String
-            ) : Serializable {
+            ) {
                 data class Place(
                     val additionalProperties: List<Any>,
                     val commonName: String,
@@ -310,7 +308,7 @@ sealed class JourneyPlannerResult {
                     val placeType: String,
                     val `$type`: String,
                     val url: String
-                ) : Serializable
+                )
             }
         }
 
@@ -320,6 +318,6 @@ sealed class JourneyPlannerResult {
             val `$type`: String,
             val uri: String,
             val via: String
-        ) : Serializable
+        )
     }
 }
