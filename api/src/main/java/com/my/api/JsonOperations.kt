@@ -8,9 +8,5 @@ const val ITINERARY_RESULT = "$TFL_JOURNEY_PLANNER.ItineraryResult"
 const val DISAMBIGUATION_RESULT = "$TFL_JOURNEY_PLANNER.DisambiguationResult"
 const val DISAMBIGUATION_OPTIONS = "disambiguationOptions"
 
-fun JSONObject.isResultType(resultType: String): Boolean {
-    if (this.has(TYPE)) {
-        if (this.getString(TYPE).contains(resultType)) return true
-    }
-    return false
-}
+fun JSONObject.isResultType(resultType: String): Boolean =
+    this.has(TYPE) && this.getString(TYPE).contains(resultType)

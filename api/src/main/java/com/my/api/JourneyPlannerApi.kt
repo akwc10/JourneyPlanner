@@ -9,16 +9,17 @@ import java.io.IOException
 
 private val logger = KotlinLogging.logger {}
 
-class RetrofitApi : IRetrofitApi {
-    var journeyPlannerResultDomainModel: JourneyPlannerResultDomainModel? = null
-
+class JourneyPlannerApi : IJourneyPlannerApi {
     override fun getJourneyResults(
         fromLocation: String,
         toLocation: String
     ): Call<JourneyPlannerResult> =
         JourneyPlannerApiService.createApiService().getJourneyResults(fromLocation, toLocation)
 
-    override fun enqueue(call: Call<JourneyPlannerResult>) {
+    override fun enqueue(
+        call: Call<JourneyPlannerResult>,
+        journeyPlannerResultDomainModels: MutableList<JourneyPlannerResultDomainModel?>
+    ) {
         call.enqueue(object : Callback<JourneyPlannerResult> {
 
             override fun onFailure(
@@ -37,7 +38,8 @@ class RetrofitApi : IRetrofitApi {
             ) {
                 if (response.isSuccessful) {
                     val responseBodyString = response.body().toString()
-                    journeyPlannerResultDomainModel = when {
+
+                    val journeyPlannerResultDomainModel = when {
                         responseBodyString.contains(ITINERARY_RESULT) -> transformItineraryTO(
                             response
                         )
@@ -47,6 +49,9 @@ class RetrofitApi : IRetrofitApi {
                         }
                         else -> throw IllegalStateException()
                     }
+                    journeyPlannerResultDomainModels.clear()
+                    journeyPlannerResultDomainModels.add(journeyPlannerResultDomainModel)
+//                    println(journeyPlannerResultDomainModel)
                 } else {
                     logger.info("responseCode: ${response.code()}")
                 }
@@ -57,7 +62,4 @@ class RetrofitApi : IRetrofitApi {
     override fun cancelAsyncCall(call: Call<JourneyPlannerResult>?) {
         call?.cancel()
     }
-
-    override fun getJourneyPlannerDomainModel(): JourneyPlannerResultDomainModel? =
-        journeyPlannerResultDomainModel
 }

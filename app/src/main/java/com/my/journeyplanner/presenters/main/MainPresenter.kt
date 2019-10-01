@@ -1,11 +1,15 @@
 package com.my.journeyplanner.presenters.main
 
 import com.my.api.JourneyPlannerResult
-import com.my.api.RetrofitApi
+import com.my.core.domain.JourneyPlannerResultDomainModel
 import com.my.journeyplanner.views.main.MainContract
+import com.my.repository.JourneyPlannerRepository
 import retrofit2.Call
 
-class MainPresenter(private val view: MainContract.View, private val retrofitApi: RetrofitApi) :
+class MainPresenter(
+    private val view: MainContract.View,
+    private val journeyPlannerRepository: JourneyPlannerRepository
+) :
     MainContract.Presenter {
     private var call: Call<JourneyPlannerResult>? = null
 
@@ -18,13 +22,14 @@ class MainPresenter(private val view: MainContract.View, private val retrofitApi
     }
 
     override fun onPlanMyJourneyClicked() {
-        call = retrofitApi.getJourneyResults(
+        val journeyPlannerResultDomainModels = mutableListOf<JourneyPlannerResultDomainModel?>()
+        call = journeyPlannerRepository.getJourneyResults(
             view.getFromLocation().text.toString(),
             view.getToLocation().text.toString()
         )
-        retrofitApi.enqueue(call!!)
+        journeyPlannerRepository.enqueue(call!!, journeyPlannerResultDomainModels)
 
-        view.showResult(retrofitApi.journeyPlannerResultDomainModel.toString())
+        view.showResult(if (journeyPlannerResultDomainModels.isNotEmpty()) journeyPlannerResultDomainModels[0].toString() else "")
     }
 
     override fun onMyJourneysClicked() {
@@ -32,6 +37,6 @@ class MainPresenter(private val view: MainContract.View, private val retrofitApi
     }
 
     override fun cancelAsyncCall() {
-        retrofitApi.cancelAsyncCall(call)
+        journeyPlannerRepository.cancelAsyncCall(call)
     }
 }
