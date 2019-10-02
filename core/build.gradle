@@ -2,6 +2,8 @@ apply plugin: 'kotlin'
 
 apply plugin: 'java-library'
 
+apply from: '../common.gradle'
+
 dependencies {}
 
 sourceCompatibility = "7"
