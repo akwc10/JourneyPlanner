@@ -18,18 +18,12 @@ class JourneyPlannerApi : IJourneyPlannerApi {
 
     override fun enqueue(
         call: Call<JourneyPlannerResult>,
-        journeyPlannerResultDomainModels: MutableList<JourneyPlannerResultDomainModel?>
+        callback: ICustomCallback<JourneyPlannerResultDomainModel>
     ) {
         call.enqueue(object : Callback<JourneyPlannerResult> {
 
-            override fun onFailure(
-                call: Call<JourneyPlannerResult>,
-                throwable: Throwable
-            ) {
-                logger.error(
-                    if (throwable is IOException) "Network failure" else "Conversion failure",
-                    throwable
-                )
+            override fun onFailure(call: Call<JourneyPlannerResult>, t: Throwable) {
+                logger.error(if (t is IOException) "Network failure" else "Conversion failure", t)
             }
 
             override fun onResponse(
@@ -43,23 +37,17 @@ class JourneyPlannerApi : IJourneyPlannerApi {
                         responseBodyString.contains(ITINERARY_RESULT) -> transformItineraryTO(
                             response
                         )
-                        responseBodyString.contains(DISAMBIGUATION_OPTIONS) -> {
-//                            TODO("as above")
-                            null
-                        }
+//                        responseBodyString.contains(DISAMBIGUATION_OPTIONS) -> {
+////                            TODO("as above")
+//                            null
+//                        }
                         else -> throw IllegalStateException()
                     }
-                    journeyPlannerResultDomainModels.clear()
-                    journeyPlannerResultDomainModels.add(journeyPlannerResultDomainModel)
-//                    println(journeyPlannerResultDomainModel)
+                    callback.onSuccess(journeyPlannerResultDomainModel)
                 } else {
                     logger.info("responseCode: ${response.code()}")
                 }
             }
         })
-    }
-
-    override fun cancelAsyncCall(call: Call<JourneyPlannerResult>?) {
-        call?.cancel()
     }
 }

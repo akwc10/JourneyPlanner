@@ -1,6 +1,11 @@
 apply plugin: 'java-library'
 
 dependencies {
+//    TODO("unable to resolve???")
+//    implementation project(':api')
+//    implementation project(':app')
+    implementation project(':core')
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 

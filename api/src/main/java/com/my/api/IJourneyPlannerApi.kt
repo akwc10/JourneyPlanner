@@ -11,8 +11,6 @@ interface IJourneyPlannerApi {
 
     fun enqueue(
         call: Call<JourneyPlannerResult>,
-        journeyPlannerResultDomainModels: MutableList<JourneyPlannerResultDomainModel?>
+        callback: ICustomCallback<JourneyPlannerResultDomainModel>
     )
-
-    fun cancelAsyncCall(call: Call<JourneyPlannerResult>?)
 }

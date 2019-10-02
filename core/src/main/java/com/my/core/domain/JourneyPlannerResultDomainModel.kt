@@ -1,5 +1,7 @@
 package com.my.core.domain
 
+import org.threeten.bp.LocalDateTime
+
 sealed class JourneyPlannerResultDomainModel {
     data class Itinerary(
         val journeyVector: JourneyVector,
@@ -13,10 +15,10 @@ sealed class JourneyPlannerResultDomainModel {
         )
 
         data class Journey(
-            val arrivalDateTime: org.threeten.bp.LocalDateTime,
+            val arrivalDateTime: LocalDateTime,
             val duration: Int,
             val legs: List<Leg>,
-            val startDateTime: org.threeten.bp.LocalDateTime
+            val startDateTime: LocalDateTime
         ) {
             data class Leg(
                 val arrivalPoint: String,

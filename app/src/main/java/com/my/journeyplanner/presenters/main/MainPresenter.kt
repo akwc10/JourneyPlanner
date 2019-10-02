@@ -1,17 +1,20 @@
 package com.my.journeyplanner.presenters.main
 
-import com.my.api.JourneyPlannerResult
+import com.my.api.ICustomCallback
 import com.my.core.domain.JourneyPlannerResultDomainModel
 import com.my.journeyplanner.views.main.MainContract
+import com.my.repository.ICancellable
 import com.my.repository.JourneyPlannerRepository
-import retrofit2.Call
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 class MainPresenter(
     private val view: MainContract.View,
     private val journeyPlannerRepository: JourneyPlannerRepository
 ) :
     MainContract.Presenter {
-    private var call: Call<JourneyPlannerResult>? = null
+    private var cancellable: ICancellable? = null
 
     override fun onChangeTimeClicked() {
 
@@ -22,14 +25,18 @@ class MainPresenter(
     }
 
     override fun onPlanMyJourneyClicked() {
-        val journeyPlannerResultDomainModels = mutableListOf<JourneyPlannerResultDomainModel?>()
-        call = journeyPlannerRepository.getJourneyResults(
+        cancellable = journeyPlannerRepository.getJourneyResults(
             view.getFromLocation().text.toString(),
-            view.getToLocation().text.toString()
-        )
-        journeyPlannerRepository.enqueue(call!!, journeyPlannerResultDomainModels)
+            view.getToLocation().text.toString(),
+            object : ICustomCallback<JourneyPlannerResultDomainModel> {
+                override fun onSuccess(result: JourneyPlannerResultDomainModel) {
+                    view.showResult(result.toString())
+                }
 
-        view.showResult(if (journeyPlannerResultDomainModels.isNotEmpty()) journeyPlannerResultDomainModels[0].toString() else "")
+                override fun onError(t: Throwable) {
+                    logger.error(t.message, t)
+                }
+            })
     }
 
     override fun onMyJourneysClicked() {
@@ -37,6 +44,6 @@ class MainPresenter(
     }
 
     override fun cancelAsyncCall() {
-        journeyPlannerRepository.cancelAsyncCall(call)
+        cancellable?.cancel()
     }
 }
