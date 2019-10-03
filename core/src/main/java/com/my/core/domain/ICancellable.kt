@@ -1,4 +1,4 @@
-package com.my.repository
+package com.my.core.domain
 
 interface ICancellable {
     fun cancel()

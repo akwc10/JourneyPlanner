@@ -1,12 +1,9 @@
-apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+apply from: '../common.gradle'
 
 dependencies {
-//    TODO("unable to resolve???")
-//    implementation project(':api')
-//    implementation project(':app')
     implementation project(':core')
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 sourceCompatibility = "7"

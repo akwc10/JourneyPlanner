@@ -1,5 +1,6 @@
 package com.my.api
 
+import com.my.core.domain.ICustomCallback
 import com.my.core.domain.JourneyPlannerResultDomainModel
 import retrofit2.Call
 

@@ -9,9 +9,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.my.journeyplanner.views.itineraryresults.ItineraryResultsActivity
-import com.my.journeyplanner.views.main.MainContract
 import com.my.journeyplanner.presenters.main.MainPresenter
+import com.my.journeyplanner.views.itineraryresults.ItineraryResultsActivity
+import com.my.presenter.main.MainContract
 import com.my.repository.JourneyPlannerRepository
 
 const val EXTRA_JOURNEY_PLANNER_RESULT = "com.my.journeyplanner.JOURNEY_PLANNER_RESULT"

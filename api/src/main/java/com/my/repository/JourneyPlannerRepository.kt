@@ -1,7 +1,9 @@
 package com.my.repository
 
-import com.my.api.ICustomCallback
 import com.my.api.JourneyPlannerApi
+import com.my.core.domain.ICancellable
+import com.my.core.domain.ICustomCallback
+import com.my.core.domain.IJourneyPlannerRepository
 import com.my.core.domain.JourneyPlannerResultDomainModel
 
 class JourneyPlannerRepository : IJourneyPlannerRepository {

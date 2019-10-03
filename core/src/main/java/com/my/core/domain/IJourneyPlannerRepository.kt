@@ -1,7 +1,4 @@
-package com.my.repository
-
-import com.my.api.ICustomCallback
-import com.my.core.domain.JourneyPlannerResultDomainModel
+package com.my.core.domain
 
 interface IJourneyPlannerRepository {
     fun getJourneyResults(

@@ -1,4 +1,4 @@
-package com.my.api
+package com.my.core.domain
 
 interface ICustomCallback<T> {
     fun onSuccess(result: T)
