@@ -1,11 +1,9 @@
-package com.my.journeyplanner.presenters.main
+package com.my.presenter.main
 
-import android.widget.EditText
 import com.my.core.domain.ICancellable
 import com.my.core.domain.ICustomCallback
 import com.my.core.domain.IJourneyPlannerRepository
 import com.my.core.domain.JourneyPlannerResultDomainModel
-import com.my.presenter.main.MainContract
 import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
@@ -26,8 +24,8 @@ class MainPresenter(
 
     override fun onPlanMyJourneyClicked() {
         cancellable = journeyPlannerRepository.getJourneyResults(
-            view.getFromLocation<EditText>().text.toString(),
-            view.getToLocation<EditText>().text.toString(),
+            view.getFromLocation(),
+            view.getToLocation(),
             object : ICustomCallback<JourneyPlannerResultDomainModel> {
                 override fun onSuccess(result: JourneyPlannerResultDomainModel) {
                     view.showResult(result.toString())

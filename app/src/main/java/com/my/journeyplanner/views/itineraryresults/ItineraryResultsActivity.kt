@@ -3,6 +3,7 @@ package com.my.journeyplanner.views.itineraryresults
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.my.journeyplanner.R
+import com.my.presenter.itineraryresults.ItineraryResultsContract
 
 class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {

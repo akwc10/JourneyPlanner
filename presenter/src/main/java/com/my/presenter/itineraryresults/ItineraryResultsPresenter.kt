@@ -1,6 +1,4 @@
-package com.my.journeyplanner.presenters.itineraryresults
-
-import com.my.journeyplanner.views.itineraryresults.ItineraryResultsContract
+package com.my.presenter.itineraryresults
 
 class ItineraryResultsPresenter(
     private val view: ItineraryResultsContract.View,

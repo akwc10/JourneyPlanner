@@ -14,8 +14,7 @@ class JourneyPlannerRepository : IJourneyPlannerRepository {
         toLocation: String,
         callback: ICustomCallback<JourneyPlannerResultDomainModel>
     ): ICancellable {
-        val call = journeyPlannerApi.getJourneyResults(fromLocation, toLocation)
-        journeyPlannerApi.enqueue(call, callback)
+        val call = journeyPlannerApi.getJourneyResults(fromLocation, toLocation, callback)
         return object : ICancellable {
             override fun cancel() {
                 call.cancel()

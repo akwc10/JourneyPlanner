@@ -9,9 +9,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.my.journeyplanner.presenters.main.MainPresenter
 import com.my.journeyplanner.views.itineraryresults.ItineraryResultsActivity
 import com.my.presenter.main.MainContract
+import com.my.presenter.main.MainPresenter
 import com.my.repository.JourneyPlannerRepository
 
 const val EXTRA_JOURNEY_PLANNER_RESULT = "com.my.journeyplanner.JOURNEY_PLANNER_RESULT"
@@ -45,9 +45,9 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         textViewResult.movementMethod = ScrollingMovementMethod()
     }
 
-    override fun getFromLocation(): EditText = editTextFromLocation
+    override fun getFromLocation() = editTextFromLocation.text.toString()
 
-    override fun getToLocation(): EditText = editTextToLocation
+    override fun getToLocation() = editTextToLocation.text.toString()
 
     override fun showItineraryResultActivity() {
         startActivity(Intent(this, ItineraryResultsActivity::class.java))

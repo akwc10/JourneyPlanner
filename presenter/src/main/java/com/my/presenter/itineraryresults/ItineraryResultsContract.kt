@@ -1,6 +1,6 @@
-package com.my.journeyplanner.views.itineraryresults
+package com.my.presenter.itineraryresults
 
-import com.my.journeyplanner.views.base.BaseContract
+import com.my.presenter.base.BaseContract
 
 class ItineraryResultsContract {
     interface View : BaseContract.View {

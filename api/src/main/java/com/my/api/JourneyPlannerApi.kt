@@ -1,5 +1,6 @@
 package com.my.api
 
+import com.my.core.domain.ICancellable
 import com.my.core.domain.ICustomCallback
 import com.my.core.domain.JourneyPlannerResultDomainModel
 import mu.KotlinLogging
@@ -13,14 +14,11 @@ private val logger = KotlinLogging.logger {}
 class JourneyPlannerApi : IJourneyPlannerApi {
     override fun getJourneyResults(
         fromLocation: String,
-        toLocation: String
-    ): Call<JourneyPlannerResult> =
-        JourneyPlannerApiService.createApiService().getJourneyResults(fromLocation, toLocation)
-
-    override fun enqueue(
-        call: Call<JourneyPlannerResult>,
+        toLocation: String,
         callback: ICustomCallback<JourneyPlannerResultDomainModel>
-    ) {
+    ): ICancellable {
+        val call =
+            JourneyPlannerApiService.createApiService().getJourneyResults(fromLocation, toLocation)
         call.enqueue(object : Callback<JourneyPlannerResult> {
 
             override fun onFailure(call: Call<JourneyPlannerResult>, t: Throwable) {
@@ -50,5 +48,10 @@ class JourneyPlannerApi : IJourneyPlannerApi {
                 }
             }
         })
+        return object : ICancellable {
+            override fun cancel() {
+                call.cancel()
+            }
+        }
     }
 }
