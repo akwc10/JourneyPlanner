@@ -32,17 +32,18 @@ class JourneyPlannerApi : IJourneyPlannerApi {
                 if (response.isSuccessful) {
                     val responseBodyString = response.body().toString()
 
-                    val journeyPlannerResultDomainModel = when {
-                        responseBodyString.contains(ITINERARY_RESULT) -> transformItineraryTO(
-                            response
-                        )
+                    callback.onSuccess(
+                        when {
+                            responseBodyString.contains(ITINERARY_RESULT) -> transformItineraryTO(
+                                response
+                            )
 //                        responseBodyString.contains(DISAMBIGUATION_OPTIONS) -> {
 ////                            TODO("as above")
 //                            null
 //                        }
-                        else -> throw IllegalStateException()
-                    }
-                    callback.onSuccess(journeyPlannerResultDomainModel)
+                            else -> throw IllegalStateException()
+                        }
+                    )
                 } else {
                     logger.info("responseCode: ${response.code()}")
                 }
