@@ -2,7 +2,9 @@ apply plugin: 'kotlin'
 
 apply from: '../common.gradle'
 
-dependencies {}
+dependencies {
+    implementation project(':core')
+}
 
 sourceCompatibility = "7"
 targetCompatibility = "7"

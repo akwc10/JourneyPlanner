@@ -1,7 +1,7 @@
-package com.my.journeyplanner.helpers.interceptors
+package com.my.api.interceptors
 
-import com.my.journeyplanner.TFL_API_APP_ID
-import com.my.journeyplanner.TFL_API_APP_KEY
+import com.my.api.TFL_API_APP_ID
+import com.my.api.TFL_API_APP_KEY
 import okhttp3.Interceptor
 import okhttp3.Response
 

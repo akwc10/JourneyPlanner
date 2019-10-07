@@ -1,28 +1,24 @@
 package com.my.journeyplanner
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.my.core.interactors.CancelAsyncCall
-import com.my.core.interactors.Enqueue
-import com.my.core.interactors.GetJourneyResults
-import com.my.journeyplanner.framework.Interactors
-import com.my.journeyplanner.framework.JourneyPlannerRepository
-import com.my.journeyplanner.presenters.MainPresenter
-import com.my.journeyplanner.views.main.MainContract
+import com.my.journeyplanner.views.itineraryresults.ItineraryResultsActivity
+import com.my.presenter.main.MainContract
+import com.my.presenter.main.MainPresenter
+import com.my.repository.JourneyPlannerRepository
+
+const val EXTRA_JOURNEY_PLANNER_RESULT = "com.my.journeyplanner.JOURNEY_PLANNER_RESULT"
 
 class MainActivity : AppCompatActivity(), MainContract.View {
-    private val journeyPlannerRepository = JourneyPlannerRepository()
-    private val interactors = Interactors(
-        GetJourneyResults(journeyPlannerRepository),
-        Enqueue(journeyPlannerRepository),
-        CancelAsyncCall(journeyPlannerRepository)
-    )
 
-    private val mainPresenter by lazy { MainPresenter(this, interactors) }
+    private val mainPresenter by lazy { MainPresenter(this, JourneyPlannerRepository()) }
 
     private val editTextFromLocation by lazy { findViewById<EditText>(R.id.editTextFromLocation) }
     private val editTextToLocation by lazy { findViewById<EditText>(R.id.editTextToLocation) }
@@ -30,6 +26,7 @@ class MainActivity : AppCompatActivity(), MainContract.View {
     private val buttonEditPreferences by lazy { findViewById<Button>(R.id.buttonEditPreferences) }
     private val buttonPlanMyJourney by lazy { findViewById<Button>(R.id.buttonPlanMyJourney) }
     private val buttonMyJourneys by lazy { findViewById<Button>(R.id.buttonMyJourneys) }
+    private val textViewResult by lazy { findViewById<TextView>(R.id.textViewResult) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +42,22 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         editTextToLocation.setText("Liverpool Street Underground Station")
 //        editTextFromLocation.setText("bfdbfdbdfbfd")
 //        editTextToLocation.setText("bfdbfdbdfbfbd")
+        textViewResult.movementMethod = ScrollingMovementMethod()
     }
 
-    override fun getFromLocation(): EditText = editTextFromLocation
+    override fun getFromLocation() = editTextFromLocation.text.toString()
 
-    override fun getToLocation(): EditText = editTextToLocation
+    override fun getToLocation() = editTextToLocation.text.toString()
+
+    override fun showItineraryResultActivity() {
+        startActivity(Intent(this, ItineraryResultsActivity::class.java))
+//        TODO("Why not conforming to Serializable?")
+//            .putExtra(EXTRA_JOURNEY_PLANNER_RESULT, mainPresenter.getJourneyPlannerResult()))
+    }
+
+    override fun showResult(result: String) {
+        textViewResult.text = result
+    }
 
     private fun addEditTextToListener() {
         editTextToLocation.setOnEditorActionListener { _, actionId, event ->

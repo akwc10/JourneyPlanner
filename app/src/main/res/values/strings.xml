@@ -7,4 +7,9 @@
     <string name="button_edit_preferences">Edit preferences</string>
     <string name="button_plan_my_journey">Plan my journey</string>
     <string name="button_my_journeys">My journeys</string>
+    <string name="textView_search_results">Search Results</string>
+    <string name="textView_from">From</string>
+    <string name="textView_to">To</string>
+    <string name="button_save">Save</string>
+    <string name="button_show_map">Map</string>
 </resources>

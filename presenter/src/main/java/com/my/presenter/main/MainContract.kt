@@ -1,12 +1,13 @@
-package com.my.journeyplanner.views.main
+package com.my.presenter.main
 
-import android.widget.EditText
-import com.my.journeyplanner.views.base.BaseContract
+import com.my.presenter.base.BaseContract
 
 class MainContract {
     interface View : BaseContract.View {
-        fun getFromLocation(): EditText
-        fun getToLocation(): EditText
+        fun getFromLocation(): String
+        fun getToLocation(): String
+        fun showItineraryResultActivity()
+        fun showResult(result: String)
     }
 
     interface Presenter : BaseContract.Presenter<View> {

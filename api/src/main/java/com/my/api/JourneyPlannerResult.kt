@@ -1,4 +1,4 @@
-package com.my.core.domain
+package com.my.api
 
 sealed class JourneyPlannerResult {
     data class Itinerary(

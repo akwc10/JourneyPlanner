@@ -1,4 +1,4 @@
-package com.my.journeyplanner.views.base
+package com.my.presenter.base
 
 class BaseContract {
     interface View

@@ -1,0 +1,9 @@
+apply plugin: 'kotlin'
+
+apply from: '../common.gradle'
+
+dependencies {
+    implementation project(':core')
+
+    implementation group: 'org.json', name: 'json', version: '20190722'
+}
