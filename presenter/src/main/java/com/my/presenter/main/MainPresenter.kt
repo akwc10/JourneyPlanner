@@ -28,7 +28,14 @@ class MainPresenter(
             view.getToLocation(),
             object : ICustomCallback<JourneyPlannerResultDomainModel> {
                 override fun onSuccess(result: JourneyPlannerResultDomainModel) {
-                    view.showResult(result.toString())
+                    when (result) {
+                        is JourneyPlannerResultDomainModel.Itinerary -> {
+                            view.showItineraryResult(result)
+                            view.showItineraryResultActivity(result)
+                        }
+                        is JourneyPlannerResultDomainModel.FromToDisambiguationOptions ->
+                            view.showDisambiguationResultActivity(result)
+                    }
                 }
 
                 override fun onError(t: Throwable) {

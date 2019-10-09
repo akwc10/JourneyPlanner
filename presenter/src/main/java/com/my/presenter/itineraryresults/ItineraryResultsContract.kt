@@ -8,6 +8,7 @@ class ItineraryResultsContract {
         fun showDetailedActivity(detailedItineraryResults: List<Any>)
         fun showMapActivity(mapItineraryResults: List<Any>)
         fun showSaveJourneyActivity(journeyDetails: List<Any>)
+        fun showResults()
     }
 
     interface Presenter : BaseContract.Presenter<View> {

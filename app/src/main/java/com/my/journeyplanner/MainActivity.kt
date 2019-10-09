@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.my.core.domain.JourneyPlannerResultDomainModel
 import com.my.journeyplanner.views.itineraryresults.ItineraryResultsActivity
 import com.my.presenter.main.MainContract
 import com.my.presenter.main.MainPresenter
@@ -49,14 +50,21 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     override fun getToLocation() = editTextToLocation.text.toString()
 
-    override fun showItineraryResultActivity() {
-        startActivity(Intent(this, ItineraryResultsActivity::class.java))
-//        TODO("Why not conforming to Serializable?")
-//            .putExtra(EXTRA_JOURNEY_PLANNER_RESULT, mainPresenter.getJourneyPlannerResult()))
+    override fun showItineraryResultActivity(journeyPlannerItineraryResultDomainModel: JourneyPlannerResultDomainModel.Itinerary) {
+        startActivity(
+            Intent(this, ItineraryResultsActivity::class.java).putExtra(
+                EXTRA_JOURNEY_PLANNER_RESULT,
+                journeyPlannerItineraryResultDomainModel
+            )
+        )
     }
 
-    override fun showResult(result: String) {
-        textViewResult.text = result
+    override fun showItineraryResult(journeyPlannerItineraryResultDomainModel: JourneyPlannerResultDomainModel.Itinerary) {
+        textViewResult.text = journeyPlannerItineraryResultDomainModel.toString()
+    }
+
+    override fun showDisambiguationResultActivity(journeyPlannerDisambiguationResultDomainModel: JourneyPlannerResultDomainModel.FromToDisambiguationOptions) {
+
     }
 
     private fun addEditTextToListener() {
