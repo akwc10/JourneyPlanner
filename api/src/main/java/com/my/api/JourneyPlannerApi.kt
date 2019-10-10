@@ -22,6 +22,7 @@ class JourneyPlannerApi : IJourneyPlannerApi {
         call.enqueue(object : Callback<JourneyPlannerResult> {
 
             override fun onFailure(call: Call<JourneyPlannerResult>, t: Throwable) {
+                callback.onError(t)
                 logger.error(if (t is IOException) "Network failure" else "Conversion failure", t)
             }
 

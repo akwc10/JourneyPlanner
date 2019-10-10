@@ -5,6 +5,7 @@ import com.my.core.domain.ICustomCallback
 import com.my.core.domain.IJourneyPlannerRepository
 import com.my.core.domain.JourneyPlannerResultDomainModel
 import mu.KotlinLogging
+import java.io.IOException
 
 private val logger = KotlinLogging.logger {}
 
@@ -28,18 +29,20 @@ class MainPresenter(
             view.getToLocation(),
             object : ICustomCallback<JourneyPlannerResultDomainModel> {
                 override fun onSuccess(result: JourneyPlannerResultDomainModel) {
+                    view.showResult("")
                     when (result) {
                         is JourneyPlannerResultDomainModel.Itinerary -> {
-                            view.showItineraryResult(result)
                             view.showItineraryResultActivity(result)
                         }
-                        is JourneyPlannerResultDomainModel.FromToDisambiguationOptions ->
+                        is JourneyPlannerResultDomainModel.FromToDisambiguationOptions -> {
+//                            TODO("No match. Please update search criteria")
                             view.showDisambiguationResultActivity(result)
+                        }
                     }
                 }
 
                 override fun onError(t: Throwable) {
-                    logger.error(t.message, t)
+                    view.showResult(if (t is IOException) "Network failure" else "Conversion failure")
                 }
             })
     }

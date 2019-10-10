@@ -1,10 +1,11 @@
 package com.my.presenter.itineraryresults
 
+import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.presenter.base.BaseContract
 
 class ItineraryResultsContract {
     interface View : BaseContract.View {
-        fun updateItineraryResultsListView(itineraryResults: List<Any>)
+        fun updateJourneys(journeys: List<Journey>)
         fun showDetailedActivity(detailedItineraryResults: List<Any>)
         fun showMapActivity(mapItineraryResults: List<Any>)
         fun showSaveJourneyActivity(journeyDetails: List<Any>)

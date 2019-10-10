@@ -8,7 +8,7 @@ class MainContract {
         fun getFromLocation(): String
         fun getToLocation(): String
         fun showItineraryResultActivity(journeyPlannerItineraryResultDomainModel: JourneyPlannerResultDomainModel.Itinerary)
-        fun showItineraryResult(journeyPlannerItineraryResultDomainModel: JourneyPlannerResultDomainModel.Itinerary)
+        fun showResult(result: String)
         fun showDisambiguationResultActivity(journeyPlannerDisambiguationResultDomainModel: JourneyPlannerResultDomainModel.FromToDisambiguationOptions)
     }
 

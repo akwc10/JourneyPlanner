@@ -59,8 +59,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         )
     }
 
-    override fun showItineraryResult(journeyPlannerItineraryResultDomainModel: JourneyPlannerResultDomainModel.Itinerary) {
-        textViewResult.text = journeyPlannerItineraryResultDomainModel.toString()
+    override fun showResult(result: String) {
+        textViewResult.text = result
     }
 
     override fun showDisambiguationResultActivity(journeyPlannerDisambiguationResultDomainModel: JourneyPlannerResultDomainModel.FromToDisambiguationOptions) {

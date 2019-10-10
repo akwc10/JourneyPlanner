@@ -1,11 +1,15 @@
 package com.my.journeyplanner.views.itineraryresults
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel
+import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.EXTRA_JOURNEY_PLANNER_RESULT
 import com.my.journeyplanner.R
 import com.my.presenter.itineraryresults.ItineraryResultsContract
@@ -22,7 +26,6 @@ class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.V
     private val textViewItineraryResults by lazy { findViewById<TextView>(R.id.textViewItineraryResults) }
     private val textViewFrom by lazy { findViewById<TextView>(R.id.textViewFrom) }
     private val textViewFromLocation by lazy { findViewById<TextView>(R.id.textViewFromLocation) }
-    private val recyclerViewItineraryResults by lazy { findViewById<RecyclerView>(R.id.recyclerViewItineraryResults) }
     private val textViewResult by lazy { findViewById<TextView>(R.id.textViewResult) }
 
     private val journeyPlannerItineraryResultDomainModel by lazy {
@@ -31,14 +34,32 @@ class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.V
         ) as JourneyPlannerResultDomainModel.Itinerary
     }
 
+    private val recyclerViewItineraryResults by lazy {
+        findViewById<RecyclerView>(R.id.recyclerViewItineraryResults).apply {
+            layoutManager = viewManager
+            adapter = viewAdapter
+            this.setHasFixedSize(true)
+        }
+    }
+    private val viewManager by lazy { LinearLayoutManager(this) }
+    private val viewAdapter by lazy { ItineraryResultsListAdapter() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_itinerary_results)
-        showResults()
+        textViewResult.movementMethod = ScrollingMovementMethod()
+//        showResults()
+        recyclerViewItineraryResults.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+        updateJourneys(journeyPlannerItineraryResultDomainModel.journeys)
     }
 
-    override fun updateItineraryResultsListView(itineraryResults: List<Any>) {
-
+    override fun updateJourneys(journeys: List<Journey>) {
+        viewAdapter.submitList(journeys)
     }
 
     override fun showDetailedActivity(detailedItineraryResults: List<Any>) {
