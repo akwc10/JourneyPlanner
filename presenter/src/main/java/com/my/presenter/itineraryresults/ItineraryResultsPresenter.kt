@@ -1,9 +1,9 @@
 package com.my.presenter.itineraryresults
 
-class ItineraryResultsPresenter(
-    private val view: ItineraryResultsContract.View,
-    private val itineraryResults: List<Any>
-) : ItineraryResultsContract.Presenter {
+import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey.Leg
+
+class ItineraryResultsPresenter(private val view: ItineraryResultsContract.View) :
+    ItineraryResultsContract.Presenter {
     override fun onAddFavouritesClicked(details: Any) {
 
     }
@@ -18,5 +18,9 @@ class ItineraryResultsPresenter(
 
     override fun onSaveJourneyClicked() {
 
+    }
+
+    override fun onJourneyClicked(legs: List<Leg>) {
+        view.showItineraryResultsLegsActivity(legs)
     }
 }

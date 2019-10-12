@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.R
 
-class ItineraryResultsListAdapter :
+class ItineraryResultsListAdapter(private val itemClickListener: (List<Journey.Leg>) -> Unit) :
     ListAdapter<Journey, ItineraryResultsListAdapter.MyViewHolder>(JourneyDiffCallback()) {
 
     class MyViewHolder(var view: View) : RecyclerView.ViewHolder(view)
@@ -37,6 +37,7 @@ class ItineraryResultsListAdapter :
             context.getString(R.string.textView_legs, journey.legs.size.toString())
         view.findViewById<TextView>(R.id.textViewDuration).text =
             context.getString(R.string.textView_duration, journey.duration.toString())
+        view.setOnClickListener { itemClickListener(journey.legs) }
     }
 
     class JourneyDiffCallback : DiffUtil.ItemCallback<Journey>() {

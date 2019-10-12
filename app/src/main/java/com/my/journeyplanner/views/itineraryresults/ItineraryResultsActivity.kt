@@ -1,5 +1,6 @@
 package com.my.journeyplanner.views.itineraryresults
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.widget.Button
@@ -12,12 +13,19 @@ import com.my.core.domain.JourneyPlannerResultDomainModel
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.EXTRA_JOURNEY_PLANNER_RESULT
 import com.my.journeyplanner.R
+import com.my.journeyplanner.views.itineraryresultslegs.ItineraryResultsLegsActivity
 import com.my.presenter.itineraryresults.ItineraryResultsContract
+import com.my.presenter.itineraryresults.ItineraryResultsPresenter
 import mu.KotlinLogging
+import java.io.Serializable
+
+const val EXTRA_ITINERARY_RESULTS_LEGS = "com.my.journeyplanner.ITINERARY_RESULTS_LEGS"
 
 private val logger = KotlinLogging.logger {}
 
 class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.View {
+
+    private val itineraryResultsPresenter by lazy { ItineraryResultsPresenter(this) }
 
     private val buttonShowMap by lazy { findViewById<Button>(R.id.buttonShowMap) }
     private val buttonSave by lazy { findViewById<Button>(R.id.buttonSave) }
@@ -42,19 +50,23 @@ class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.V
         }
     }
     private val viewManager by lazy { LinearLayoutManager(this) }
-    private val viewAdapter by lazy { ItineraryResultsListAdapter() }
+    private val viewAdapter by lazy {
+        ItineraryResultsListAdapter { legs: List<Journey.Leg> ->
+            itineraryResultsPresenter.onJourneyClicked(legs)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_itinerary_results)
         textViewResult.movementMethod = ScrollingMovementMethod()
-//        showResults()
         recyclerViewItineraryResults.addItemDecoration(
             DividerItemDecoration(
                 this,
                 DividerItemDecoration.VERTICAL
             )
         )
+//        TODO("Sticky headers decoration. Let me know if needed")
         updateJourneys(journeyPlannerItineraryResultDomainModel.journeys)
     }
 
@@ -74,8 +86,18 @@ class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.V
 
     }
 
+    //    TODO("Remove later")
     override fun showResults() {
         textViewResult.text = journeyPlannerItineraryResultDomainModel.toString()
-        logger.info { "journeyPlannerItineraryResultDomainModel: $journeyPlannerItineraryResultDomainModel" }
+    }
+
+    //    TODO("Do I need to make the list parcelable so it can be cast for getExtra()?")
+    override fun showItineraryResultsLegsActivity(legs: List<Journey.Leg>) {
+        startActivity(
+            Intent(this, ItineraryResultsLegsActivity::class.java).putExtra(
+                EXTRA_ITINERARY_RESULTS_LEGS,
+                legs as Serializable
+            )
+        )
     }
 }

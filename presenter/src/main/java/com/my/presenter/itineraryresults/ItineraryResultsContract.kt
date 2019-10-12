@@ -10,6 +10,7 @@ class ItineraryResultsContract {
         fun showMapActivity(mapItineraryResults: List<Any>)
         fun showSaveJourneyActivity(journeyDetails: List<Any>)
         fun showResults()
+        fun showItineraryResultsLegsActivity(legs: List<Journey.Leg>)
     }
 
     interface Presenter : BaseContract.Presenter<View> {
@@ -18,5 +19,6 @@ class ItineraryResultsContract {
         fun onViewDetailedClicked(details: Any)
         fun onMapViewClicked(details: Any)
         fun onSaveJourneyClicked()
+        fun onJourneyClicked(legs: List<Journey.Leg>)
     }
 }
