@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.my.core.domain.JourneyPlannerResultDomainModel
 import com.my.journeyplanner.R
-import com.my.journeyplanner.views.itineraryresults.EXTRA_ITINERARY_RESULTS_LEGS
+import com.my.journeyplanner.views.results.EXTRA_ITINERARY_RESULTS_LEGS
 import com.my.presenter.itineraryresultslegs.ItineraryResultsLegsContract
 
 class ItineraryResultsLegsActivity : AppCompatActivity(), ItineraryResultsLegsContract.View {

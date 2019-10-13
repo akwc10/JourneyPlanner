@@ -1,4 +1,4 @@
-package com.my.journeyplanner.views.itineraryresults
+package com.my.journeyplanner.views.results
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,11 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
-import com.my.journeyplanner.EXTRA_JOURNEY_PLANNER_RESULT
+import com.my.journeyplanner.EXTRA_FROM_LOCATION
+import com.my.journeyplanner.EXTRA_TO_LOCATION
 import com.my.journeyplanner.R
+import com.my.journeyplanner.views.itineraryresultsfragment.ItineraryResultsFragment
+import com.my.journeyplanner.views.itineraryresultsfragment.ItineraryResultsListAdapter
 import com.my.journeyplanner.views.itineraryresultslegs.ItineraryResultsLegsActivity
-import com.my.presenter.itineraryresults.ItineraryResultsContract
-import com.my.presenter.itineraryresults.ItineraryResultsPresenter
+import com.my.presenter.results.ResultsContract
+import com.my.presenter.results.ResultsPresenter
+import com.my.repository.JourneyPlannerRepository
 import mu.KotlinLogging
 import java.io.Serializable
 
@@ -23,9 +27,17 @@ const val EXTRA_ITINERARY_RESULTS_LEGS = "com.my.journeyplanner.ITINERARY_RESULT
 
 private val logger = KotlinLogging.logger {}
 
-class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.View {
+class ResultsActivity : AppCompatActivity(), ResultsContract.View {
 
-    private val itineraryResultsPresenter by lazy { ItineraryResultsPresenter(this) }
+    private val fromLocation by lazy { intent.getStringExtra(EXTRA_FROM_LOCATION) }
+    private val toLocation by lazy { intent.getStringExtra(EXTRA_TO_LOCATION) }
+
+    private val itineraryResultsPresenter by lazy {
+        ResultsPresenter(
+            this,
+            JourneyPlannerRepository()
+        )
+    }
 
     private val buttonShowMap by lazy { findViewById<Button>(R.id.buttonShowMap) }
     private val buttonSave by lazy { findViewById<Button>(R.id.buttonSave) }
@@ -35,13 +47,6 @@ class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.V
     private val textViewFrom by lazy { findViewById<TextView>(R.id.textViewFrom) }
     private val textViewFromLocation by lazy { findViewById<TextView>(R.id.textViewFromLocation) }
     private val textViewResult by lazy { findViewById<TextView>(R.id.textViewResult) }
-
-    private val journeyPlannerItineraryResultDomainModel by lazy {
-        intent.getSerializableExtra(
-            EXTRA_JOURNEY_PLANNER_RESULT
-        ) as JourneyPlannerResultDomainModel.Itinerary
-    }
-
     private val recyclerViewItineraryResults by lazy {
         findViewById<RecyclerView>(R.id.recyclerViewItineraryResults).apply {
             layoutManager = viewManager
@@ -58,7 +63,7 @@ class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.V
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_itinerary_results)
+        setContentView(R.layout.activity_results)
         textViewResult.movementMethod = ScrollingMovementMethod()
         recyclerViewItineraryResults.addItemDecoration(
             DividerItemDecoration(
@@ -66,8 +71,7 @@ class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.V
                 DividerItemDecoration.VERTICAL
             )
         )
-//        TODO("Sticky headers decoration. Let me know if needed")
-        updateJourneys(journeyPlannerItineraryResultDomainModel.journeys)
+        itineraryResultsPresenter.getJourneyResults(fromLocation, toLocation)
     }
 
     override fun updateJourneys(journeys: List<Journey>) {
@@ -86,9 +90,8 @@ class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.V
 
     }
 
-    //    TODO("Remove later")
     override fun showResults() {
-        textViewResult.text = journeyPlannerItineraryResultDomainModel.toString()
+
     }
 
     //    TODO("Do I need to make the list parcelable so it can be cast for getExtra()?")
@@ -99,5 +102,23 @@ class ItineraryResultsActivity : AppCompatActivity(), ItineraryResultsContract.V
                 legs as Serializable
             )
         )
+    }
+
+    override fun showItineraryResultsFragment(result: List<Journey>) {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragmentResults, ItineraryResultsFragment.newInstance(result))
+            .commit()
+    }
+
+    override fun showDisambiguationResultsFragment(result: JourneyPlannerResultDomainModel.FromToDisambiguationOptions) {
+
+    }
+
+    override fun showNoResultsFragment() {
+
+    }
+
+    override fun showErrorFragment(error: String) {
+
     }
 }

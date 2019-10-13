@@ -16,4 +16,7 @@
     <string name="textView_arrival_time">Arrival Time: %s</string>
     <string name="textView_legs">Legs: %s</string>
     <string name="textView_duration">Duration: %s</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

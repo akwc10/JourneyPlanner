@@ -1,4 +1,4 @@
-package com.my.journeyplanner.views.itineraryresults
+package com.my.journeyplanner.views.itineraryresultsfragment
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +11,17 @@ import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.R
 
 class ItineraryResultsListAdapter(private val itemClickListener: (List<Journey.Leg>) -> Unit) :
-    ListAdapter<Journey, ItineraryResultsListAdapter.MyViewHolder>(JourneyDiffCallback()) {
+    ListAdapter<Journey, ItineraryResultsListAdapter.MyViewHolder>(
+        JourneyDiffCallback()
+    ) {
 
     class MyViewHolder(var view: View) : RecyclerView.ViewHolder(view)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MyViewHolder(
-        LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_text_views_itinerary_results, parent, false)
-    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        MyViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.recycler_text_views_itinerary_results, parent, false)
+        )
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val view = holder.view
