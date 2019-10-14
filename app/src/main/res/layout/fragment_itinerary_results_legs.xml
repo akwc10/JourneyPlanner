@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.itineraryresults.ItineraryResultsFragment">
+    tools:context=".views.itineraryresultslegs.ItineraryResultsLegsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewItineraryResults"
+        android:id="@+id/recyclerViewItineraryResultsLegs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />

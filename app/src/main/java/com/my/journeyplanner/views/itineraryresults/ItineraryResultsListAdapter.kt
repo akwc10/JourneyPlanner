@@ -1,4 +1,4 @@
-package com.my.journeyplanner.views.itineraryresultsfragment
+package com.my.journeyplanner.views.itineraryresults
 
 import android.view.LayoutInflater
 import android.view.View

@@ -18,10 +18,6 @@ class ResultsPresenter(
 
     }
 
-    override fun onViewDetailedClicked(details: Any) {
-
-    }
-
     override fun onMapViewClicked(details: Any) {
 
     }
