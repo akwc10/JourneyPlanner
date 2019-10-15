@@ -11,10 +11,7 @@ import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.R
 
 class ItineraryResultsListAdapter(private val itemClickListener: (List<Journey.Leg>) -> Unit) :
-    ListAdapter<Journey, ItineraryResultsListAdapter.MyViewHolder>(
-        JourneyDiffCallback()
-    ) {
-
+    ListAdapter<Journey, ItineraryResultsListAdapter.MyViewHolder>(JourneyDiffCallback()) {
     class MyViewHolder(var view: View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -27,7 +24,6 @@ class ItineraryResultsListAdapter(private val itemClickListener: (List<Journey.L
         val view = holder.view
         val context = view.context
         val journey = getItem(position)
-
         view.findViewById<TextView>(R.id.textViewStartTime).text = context.getString(
             R.string.textView_start_time,
             journey.startDateTime.toLocalTime().toString()

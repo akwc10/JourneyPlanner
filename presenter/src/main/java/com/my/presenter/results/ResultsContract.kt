@@ -8,10 +8,9 @@ class ResultsContract {
     interface View : BaseContract.View {
         fun showMapActivity(mapItineraryResults: List<Any>)
         fun showSaveJourneyActivity(journeyDetails: List<Any>)
-        fun showItineraryResultsLegsActivity(legs: List<Journey.Leg>)
-        fun showItineraryResultsFragment(result: List<Journey>)
+        fun showItineraryResultsFragment(journeys: List<Journey>)
         fun showItineraryResultsLegsFragment(legs: List<Journey.Leg>)
-        fun showDisambiguationResultsFragment(result: JourneyPlannerResultDomainModel.FromToDisambiguationOptions)
+        fun showDisambiguationResultsFragment(disambiguationOptions: JourneyPlannerResultDomainModel.FromToDisambiguationOptions)
         fun showNoResultsFragment()
         fun showErrorFragment(error: String)
     }
@@ -20,7 +19,6 @@ class ResultsContract {
         fun onAddFavouritesClicked(details: Any)
         fun onMapViewClicked(details: Any)
         fun onSaveJourneyClicked()
-        fun onJourneyClicked(legs: List<Journey.Leg>)
         fun getJourneyResults(fromLocation: String, toLocation: String)
         fun cancelAsyncCall()
     }

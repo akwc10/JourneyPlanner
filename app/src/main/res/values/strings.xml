@@ -12,11 +12,11 @@
     <string name="textView_to">To</string>
     <string name="button_save">Save</string>
     <string name="button_show_map">Map</string>
-    <string name="textView_start_time">Start Time: %s</string>
-    <string name="textView_arrival_time">Arrival Time: %s</string>
-    <string name="textView_legs">Legs: %s</string>
-    <string name="textView_duration">Duration: %s</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="textView_start_time">Start Time:\n%s</string>
+    <string name="textView_arrival_time">Arrival Time:\n%s</string>
+    <string name="textView_legs">Legs:\n%s</string>
+    <string name="textView_duration">Duration:\n%s</string>
+    <string name="textView_leg">Leg:\n%s</string>
+    <string name="textView_arrival_point">Arrival Point:\n%s</string>
+    <string name="textView_departure_point">Departure Point:\n%s</string>
 </resources>

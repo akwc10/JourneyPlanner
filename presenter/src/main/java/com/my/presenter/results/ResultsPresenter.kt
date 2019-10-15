@@ -4,7 +4,6 @@ import com.my.core.domain.ICancellable
 import com.my.core.domain.ICustomCallback
 import com.my.core.domain.IJourneyPlannerRepository
 import com.my.core.domain.JourneyPlannerResultDomainModel
-import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey.Leg
 import java.io.IOException
 
 class ResultsPresenter(
@@ -26,10 +25,6 @@ class ResultsPresenter(
 
     }
 
-    override fun onJourneyClicked(legs: List<Leg>) {
-        view.showItineraryResultsLegsActivity(legs)
-    }
-
     override fun getJourneyResults(fromLocation: String, toLocation: String) {
         cancellable = journeyPlannerRepository.getJourneyResults(
             fromLocation,
@@ -41,7 +36,7 @@ class ResultsPresenter(
                             view.showItineraryResultsFragment(result.journeys)
                         }
                         is JourneyPlannerResultDomainModel.FromToDisambiguationOptions -> {
-//                            TODO("No match. Please update search criteria")
+//                            TODO("No match")
                             view.showDisambiguationResultsFragment(result)
                         }
                     }

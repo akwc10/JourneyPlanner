@@ -10,31 +10,24 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
+import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey.Leg
 import com.my.journeyplanner.R
 import com.my.presenter.itineraryresultsfragment.ItineraryResultsFragmentContract
-import mu.KotlinLogging
 import java.io.Serializable
 
-private const val EXTRA_JOURNEY_PLANNER_JOURNEYS_RESULT_DOMAIN_MODEL =
-    "com.my.journeyplanner.JOURNEYS_RESULTS_DOMAIN_MODEL"
-
-private val logger = KotlinLogging.logger {}
+private const val EXTRA_JOURNEYS_DOMAIN_MODEL = "com.my.journeyplanner.JOURNEYS_DOMAIN_MODEL"
 
 class ItineraryResultsFragment : Fragment(), ItineraryResultsFragmentContract.View {
-
-    private val viewAdapter by lazy {
-        ItineraryResultsListAdapter { legs: List<Journey.Leg> ->
-            onJourneyPressed(legs)
-        }
-    }
-
     private var listener: OnItineraryResultsFragmentInteractionListener? = null
+    private val viewAdapter by lazy {
+        ItineraryResultsListAdapter { legs: List<Leg> -> onJourneyPressed(legs) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             @Suppress("UNCHECKED_CAST")
-            updateJourneys(it.getSerializable(EXTRA_JOURNEY_PLANNER_JOURNEYS_RESULT_DOMAIN_MODEL) as List<Journey>)
+            updateJourneys(it.getSerializable(EXTRA_JOURNEYS_DOMAIN_MODEL) as List<Journey>)
         }
     }
 
@@ -54,8 +47,8 @@ class ItineraryResultsFragment : Fragment(), ItineraryResultsFragmentContract.Vi
         viewAdapter.submitList(journeys)
     }
 
-    private fun onJourneyPressed(legs: List<Journey.Leg>) {
-        listener?.onFragmentInteraction(legs)
+    private fun onJourneyPressed(legs: List<Leg>) {
+        listener?.onItineraryResultsFragmentInteraction(legs)
     }
 
     override fun onAttach(context: Context) {
@@ -73,18 +66,15 @@ class ItineraryResultsFragment : Fragment(), ItineraryResultsFragmentContract.Vi
     }
 
     interface OnItineraryResultsFragmentInteractionListener {
-        fun onFragmentInteraction(legs: List<Journey.Leg>)
+        fun onItineraryResultsFragmentInteraction(legs: List<Leg>)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(result: List<Journey>) =
+        fun newInstance(journeys: List<Journey>) =
             ItineraryResultsFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(
-                        EXTRA_JOURNEY_PLANNER_JOURNEYS_RESULT_DOMAIN_MODEL,
-                        result as Serializable
-                    )
+                    putSerializable(EXTRA_JOURNEYS_DOMAIN_MODEL, journeys as Serializable)
                 }
             }
     }

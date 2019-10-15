@@ -1,6 +1,5 @@
 package com.my.journeyplanner.views.results
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.widget.Button
@@ -12,31 +11,18 @@ import com.my.journeyplanner.EXTRA_FROM_LOCATION
 import com.my.journeyplanner.EXTRA_TO_LOCATION
 import com.my.journeyplanner.R
 import com.my.journeyplanner.views.itineraryresults.ItineraryResultsFragment
-import com.my.journeyplanner.views.itineraryresultslegs.ItineraryResultsLegsActivity
 import com.my.journeyplanner.views.itineraryresultslegs.ItineraryResultsLegsFragment
 import com.my.presenter.results.ResultsContract
 import com.my.presenter.results.ResultsPresenter
 import com.my.repository.JourneyPlannerRepository
-import mu.KotlinLogging
-import java.io.Serializable
-
-const val EXTRA_ITINERARY_RESULTS_LEGS = "com.my.journeyplanner.ITINERARY_RESULTS_LEGS"
-
-private val logger = KotlinLogging.logger {}
 
 class ResultsActivity : AppCompatActivity(), ResultsContract.View,
     ItineraryResultsFragment.OnItineraryResultsFragmentInteractionListener {
-
     private val fromLocation by lazy { intent.getStringExtra(EXTRA_FROM_LOCATION) }
     private val toLocation by lazy { intent.getStringExtra(EXTRA_TO_LOCATION) }
-
     private val itineraryResultsPresenter by lazy {
-        ResultsPresenter(
-            this,
-            JourneyPlannerRepository()
-        )
+        ResultsPresenter(this, JourneyPlannerRepository())
     }
-
     private val buttonShowMap by lazy { findViewById<Button>(R.id.buttonShowMap) }
     private val buttonSave by lazy { findViewById<Button>(R.id.buttonSave) }
     private val textViewTo by lazy { findViewById<TextView>(R.id.textViewTo) }
@@ -61,27 +47,18 @@ class ResultsActivity : AppCompatActivity(), ResultsContract.View,
 
     }
 
-    //    TODO("Do I need to make the list parcelable so it can be cast for getExtra()?")
-    override fun showItineraryResultsLegsActivity(legs: List<Journey.Leg>) {
-        startActivity(
-            Intent(this, ItineraryResultsLegsActivity::class.java).putExtra(
-                EXTRA_ITINERARY_RESULTS_LEGS,
-                legs as Serializable
-            )
-        )
-    }
-
-    override fun showItineraryResultsFragment(result: List<Journey>) {
+    override fun showItineraryResultsFragment(journeys: List<Journey>) {
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragmentResults, ItineraryResultsFragment.newInstance(result)).commit()
+            .add(R.id.fragmentResults, ItineraryResultsFragment.newInstance(journeys)).commit()
     }
 
     override fun showItineraryResultsLegsFragment(legs: List<Journey.Leg>) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentResults, ItineraryResultsLegsFragment.newInstance(legs)).addToBackStack(null).commit()
+            .replace(R.id.fragmentResults, ItineraryResultsLegsFragment.newInstance(legs))
+            .addToBackStack(null).commit()
     }
 
-    override fun showDisambiguationResultsFragment(result: JourneyPlannerResultDomainModel.FromToDisambiguationOptions) {
+    override fun showDisambiguationResultsFragment(disambiguationOptions: JourneyPlannerResultDomainModel.FromToDisambiguationOptions) {
 
     }
 
@@ -93,7 +70,7 @@ class ResultsActivity : AppCompatActivity(), ResultsContract.View,
 
     }
 
-    override fun onFragmentInteraction(legs: List<Journey.Leg>) {
+    override fun onItineraryResultsFragmentInteraction(legs: List<Journey.Leg>) {
         showItineraryResultsLegsFragment(legs)
     }
 }
