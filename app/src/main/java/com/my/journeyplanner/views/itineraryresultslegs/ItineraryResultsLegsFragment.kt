@@ -18,17 +18,13 @@ private const val EXTRA_LEGS_DOMAIN_MODEL = "com.my.journeyplanner.LEGS_DOMAIN_M
 class ItineraryResultsLegsFragment : Fragment(), ItineraryResultsLegsContract.View {
     private val viewAdapter by lazy { ItineraryResultsLegsListAdapter() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         arguments?.let {
             @Suppress("UNCHECKED_CAST")
             updateLegs(it.getSerializable(EXTRA_LEGS_DOMAIN_MODEL) as List<Leg>)
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
         val root = inflater.inflate(R.layout.fragment_itinerary_results_legs, container, false)
         root.findViewById<RecyclerView>(R.id.recyclerViewItineraryResultsLegs).apply {
             layoutManager = LinearLayoutManager(context)

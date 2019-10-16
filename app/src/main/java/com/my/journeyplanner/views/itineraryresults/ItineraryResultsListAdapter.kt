@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.R
+import org.threeten.bp.Duration
 
 class ItineraryResultsListAdapter(private val itemClickListener: (List<Journey.Leg>) -> Unit) :
     ListAdapter<Journey, ItineraryResultsListAdapter.MyViewHolder>(JourneyDiffCallback()) {
@@ -24,18 +25,23 @@ class ItineraryResultsListAdapter(private val itemClickListener: (List<Journey.L
         val view = holder.view
         val context = view.context
         val journey = getItem(position)
-        view.findViewById<TextView>(R.id.textViewStartTime).text = context.getString(
+        val textViewStartTime = view.findViewById<TextView>(R.id.textViewStartTime)
+        val textViewArrivalTime = view.findViewById<TextView>(R.id.textViewArrivalTime)
+        val textViewLegs = view.findViewById<TextView>(R.id.textViewLegs)
+        val textViewDuration = view.findViewById<TextView>(R.id.textViewDuration)
+        textViewStartTime.text = context.getString(
             R.string.textView_start_time,
             journey.startDateTime.toLocalTime().toString()
         )
-        view.findViewById<TextView>(R.id.textViewArrivalTime).text = context.getString(
+        textViewArrivalTime.text = context.getString(
             R.string.textView_arrival_time,
             journey.arrivalDateTime.toLocalTime().toString()
         )
-        view.findViewById<TextView>(R.id.textViewLegs).text =
-            context.getString(R.string.textView_legs, journey.legs.size.toString())
-        view.findViewById<TextView>(R.id.textViewDuration).text =
-            context.getString(R.string.textView_duration, journey.duration.toString())
+        textViewLegs.text = context.getString(R.string.textView_legs, journey.legs.size.toString())
+        textViewDuration.text = context.getString(
+            R.string.textView_duration,
+            Duration.between(journey.startDateTime, journey.arrivalDateTime).toMinutes().toString()
+        )
         view.setOnClickListener { itemClickListener(journey.legs) }
     }
 

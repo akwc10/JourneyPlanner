@@ -17,9 +17,10 @@ fun transformItineraryTO(response: Response<JourneyPlannerResult>): JourneyPlann
         journeys = itineraryResult.journeys.map { journey ->
             JourneyPlannerResultDomainModel.Itinerary.Journey(
                 arrivalDateTime = LocalDateTime.parse(journey.arrivalDateTime),
-                duration = journey.duration,
                 legs = journey.legs.map { leg ->
                     JourneyPlannerResultDomainModel.Itinerary.Journey.Leg(
+                        LocalDateTime.parse(leg.departureTime),
+                        LocalDateTime.parse(leg.arrivalTime),
                         leg.arrivalPoint.commonName,
                         leg.departurePoint.commonName,
                         leg.duration

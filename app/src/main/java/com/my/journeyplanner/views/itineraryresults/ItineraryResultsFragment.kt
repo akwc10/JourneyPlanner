@@ -23,17 +23,13 @@ class ItineraryResultsFragment : Fragment(), ItineraryResultsFragmentContract.Vi
         ItineraryResultsListAdapter { legs: List<Leg> -> onJourneyPressed(legs) }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         arguments?.let {
             @Suppress("UNCHECKED_CAST")
             updateJourneys(it.getSerializable(EXTRA_JOURNEYS_DOMAIN_MODEL) as List<Journey>)
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
         val root = inflater.inflate(R.layout.fragment_itinerary_results, container, false)
         root.findViewById<RecyclerView>(R.id.recyclerViewItineraryResults).apply {
             layoutManager = LinearLayoutManager(context)
@@ -56,13 +52,13 @@ class ItineraryResultsFragment : Fragment(), ItineraryResultsFragmentContract.Vi
         if (context is OnItineraryResultsFragmentInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException("$context must implement OnItineraryResultsFragmentInteractionListener")
+            throw IllegalStateException("$context must implement OnItineraryResultsFragmentInteractionListener")
         }
     }
 
     override fun onDetach() {
-        super.onDetach()
         listener = null
+        super.onDetach()
     }
 
     interface OnItineraryResultsFragmentInteractionListener {

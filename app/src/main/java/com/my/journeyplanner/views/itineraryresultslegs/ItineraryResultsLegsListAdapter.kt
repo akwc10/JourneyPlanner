@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey.Leg
 import com.my.journeyplanner.R
+import org.threeten.bp.Duration
 
 class ItineraryResultsLegsListAdapter :
     ListAdapter<Leg, ItineraryResultsLegsListAdapter.MyViewHolder>(LegDiffCallback()) {
@@ -24,14 +25,19 @@ class ItineraryResultsLegsListAdapter :
         val view = holder.view
         val context = view.context
         val leg = getItem(position)
-        view.findViewById<TextView>(R.id.textViewLeg).text =
-            context.getString(R.string.textView_leg, (position + 1).toString())
-        view.findViewById<TextView>(R.id.textViewDeparturePoint).text =
+        val textViewLeg = view.findViewById<TextView>(R.id.textViewLeg)
+        val textViewDeparturePoint = view.findViewById<TextView>(R.id.textViewDeparturePoint)
+        val textViewArrivalPoint = view.findViewById<TextView>(R.id.textViewArrivalPoint)
+        val textViewDuration = view.findViewById<TextView>(R.id.textViewDuration)
+        textViewLeg.text = context.getString(R.string.textView_leg, (position + 1).toString())
+        textViewDeparturePoint.text =
             context.getString(R.string.textView_departure_point, leg.departurePoint)
-        view.findViewById<TextView>(R.id.textViewArrivalPoint).text =
+        textViewArrivalPoint.text =
             context.getString(R.string.textView_arrival_point, leg.arrivalPoint)
-        view.findViewById<TextView>(R.id.textViewDuration).text =
-            context.getString(R.string.textView_duration, leg.duration.toString())
+        textViewDuration.text = context.getString(
+            R.string.textView_duration,
+            Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString()
+        )
     }
 
     class LegDiffCallback : DiffUtil.ItemCallback<Leg>() {

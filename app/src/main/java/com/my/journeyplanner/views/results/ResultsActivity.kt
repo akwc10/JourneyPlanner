@@ -1,7 +1,6 @@
 package com.my.journeyplanner.views.results
 
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -30,12 +29,10 @@ class ResultsActivity : AppCompatActivity(), ResultsContract.View,
     private val textViewItineraryResults by lazy { findViewById<TextView>(R.id.textViewItineraryResults) }
     private val textViewFrom by lazy { findViewById<TextView>(R.id.textViewFrom) }
     private val textViewFromLocation by lazy { findViewById<TextView>(R.id.textViewFromLocation) }
-    private val textViewResult by lazy { findViewById<TextView>(R.id.textViewResult) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_results)
-        textViewResult.movementMethod = ScrollingMovementMethod()
         itineraryResultsPresenter.getJourneyResults(fromLocation, toLocation)
     }
 
@@ -49,7 +46,7 @@ class ResultsActivity : AppCompatActivity(), ResultsContract.View,
 
     override fun showItineraryResultsFragment(journeys: List<Journey>) {
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragmentResults, ItineraryResultsFragment.newInstance(journeys)).commit()
+            .replace(R.id.fragmentResults, ItineraryResultsFragment.newInstance(journeys)).commit()
     }
 
     override fun showItineraryResultsLegsFragment(legs: List<Journey.Leg>) {

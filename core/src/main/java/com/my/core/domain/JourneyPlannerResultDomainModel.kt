@@ -17,11 +17,12 @@ sealed class JourneyPlannerResultDomainModel : Serializable {
 
         data class Journey(
             val arrivalDateTime: LocalDateTime,
-            val duration: Int,
             val legs: List<Leg>,
             val startDateTime: LocalDateTime
         ) : Serializable {
             data class Leg(
+                val departureTime: LocalDateTime,
+                val arrivalTime: LocalDateTime,
                 val arrivalPoint: String,
                 val departurePoint: String,
                 val duration: Int
