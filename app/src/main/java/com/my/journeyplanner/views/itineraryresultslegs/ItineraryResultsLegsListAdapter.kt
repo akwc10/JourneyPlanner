@@ -13,7 +13,12 @@ import org.threeten.bp.Duration
 
 class ItineraryResultsLegsListAdapter :
     ListAdapter<Leg, ItineraryResultsLegsListAdapter.MyViewHolder>(LegDiffCallback()) {
-    class MyViewHolder(var view: View) : RecyclerView.ViewHolder(view)
+    class MyViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        val textViewLeg: TextView = view.findViewById(R.id.textViewLeg)
+        val textViewDeparturePoint: TextView = view.findViewById(R.id.textViewDeparturePoint)
+        val textViewArrivalPoint: TextView = view.findViewById(R.id.textViewArrivalPoint)
+        val textViewDuration: TextView = view.findViewById(R.id.textViewDuration)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MyViewHolder(
@@ -22,19 +27,15 @@ class ItineraryResultsLegsListAdapter :
         )
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val view = holder.view
-        val context = view.context
+        val context = holder.view.context
         val leg = getItem(position)
-        val textViewLeg = view.findViewById<TextView>(R.id.textViewLeg)
-        val textViewDeparturePoint = view.findViewById<TextView>(R.id.textViewDeparturePoint)
-        val textViewArrivalPoint = view.findViewById<TextView>(R.id.textViewArrivalPoint)
-        val textViewDuration = view.findViewById<TextView>(R.id.textViewDuration)
-        textViewLeg.text = context.getString(R.string.textView_leg, (position + 1).toString())
-        textViewDeparturePoint.text =
+        holder.textViewLeg.text =
+            context.getString(R.string.textView_leg, (position + 1).toString())
+        holder.textViewDeparturePoint.text =
             context.getString(R.string.textView_departure_point, leg.departurePoint)
-        textViewArrivalPoint.text =
+        holder.textViewArrivalPoint.text =
             context.getString(R.string.textView_arrival_point, leg.arrivalPoint)
-        textViewDuration.text = context.getString(
+        holder.textViewDuration.text = context.getString(
             R.string.textView_duration,
             Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString()
         )

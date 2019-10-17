@@ -21,10 +21,6 @@ class ItineraryResultsLegsFragment : Fragment(), ItineraryResultsLegsContract.Vi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        arguments?.let {
-            @Suppress("UNCHECKED_CAST")
-            updateLegs(it.getSerializable(EXTRA_LEGS_DOMAIN_MODEL) as List<Leg>)
-        }
         val root = inflater.inflate(R.layout.fragment_itinerary_results_legs, container, false)
         root.findViewById<RecyclerView>(R.id.recyclerViewItineraryResultsLegs).apply {
             layoutManager = LinearLayoutManager(context)
@@ -32,6 +28,14 @@ class ItineraryResultsLegsFragment : Fragment(), ItineraryResultsLegsContract.Vi
             this.setHasFixedSize(true)
         }.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            @Suppress("UNCHECKED_CAST")
+            updateLegs(it.getSerializable(EXTRA_LEGS_DOMAIN_MODEL) as List<Leg>)
+        }
     }
 
     override fun updateLegs(legs: List<Leg>) {

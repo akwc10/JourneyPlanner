@@ -30,6 +30,8 @@ class JourneyPlannerApi : IJourneyPlannerApi {
                 call: Call<JourneyPlannerResult>,
                 response: Response<JourneyPlannerResult>
             ) {
+//                TODO("Remove later")
+                logger.info("response.raw().request(): ${response.raw().request()}")
                 if (response.isSuccessful) {
                     val responseBodyString = response.body().toString()
 

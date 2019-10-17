@@ -13,7 +13,12 @@ import org.threeten.bp.Duration
 
 class ItineraryResultsListAdapter(private val itemClickListener: (List<Journey.Leg>) -> Unit) :
     ListAdapter<Journey, ItineraryResultsListAdapter.MyViewHolder>(JourneyDiffCallback()) {
-    class MyViewHolder(var view: View) : RecyclerView.ViewHolder(view)
+    class MyViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
+        val textViewStartTime: TextView = view.findViewById(R.id.textViewStartTime)
+        val textViewArrivalTime: TextView = view.findViewById(R.id.textViewArrivalTime)
+        val textViewLegs: TextView = view.findViewById(R.id.textViewLegs)
+        val textViewDuration: TextView = view.findViewById(R.id.textViewDuration)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MyViewHolder(
@@ -22,27 +27,23 @@ class ItineraryResultsListAdapter(private val itemClickListener: (List<Journey.L
         )
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val view = holder.view
-        val context = view.context
+        val context = holder.view.context
         val journey = getItem(position)
-        val textViewStartTime = view.findViewById<TextView>(R.id.textViewStartTime)
-        val textViewArrivalTime = view.findViewById<TextView>(R.id.textViewArrivalTime)
-        val textViewLegs = view.findViewById<TextView>(R.id.textViewLegs)
-        val textViewDuration = view.findViewById<TextView>(R.id.textViewDuration)
-        textViewStartTime.text = context.getString(
+        holder.textViewStartTime.text = context.getString(
             R.string.textView_start_time,
             journey.startDateTime.toLocalTime().toString()
         )
-        textViewArrivalTime.text = context.getString(
+        holder.textViewArrivalTime.text = context.getString(
             R.string.textView_arrival_time,
             journey.arrivalDateTime.toLocalTime().toString()
         )
-        textViewLegs.text = context.getString(R.string.textView_legs, journey.legs.size.toString())
-        textViewDuration.text = context.getString(
+        holder.textViewLegs.text =
+            context.getString(R.string.textView_legs, journey.legs.size.toString())
+        holder.textViewDuration.text = context.getString(
             R.string.textView_duration,
             Duration.between(journey.startDateTime, journey.arrivalDateTime).toMinutes().toString()
         )
-        view.setOnClickListener { itemClickListener(journey.legs) }
+        holder.view.setOnClickListener { itemClickListener(journey.legs) }
     }
 
     class JourneyDiffCallback : DiffUtil.ItemCallback<Journey>() {
