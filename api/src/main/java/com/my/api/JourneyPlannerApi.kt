@@ -22,6 +22,7 @@ class JourneyPlannerApi : IJourneyPlannerApi {
         call.enqueue(object : Callback<JourneyPlannerResult> {
 
             override fun onFailure(call: Call<JourneyPlannerResult>, t: Throwable) {
+                callback.onError(t)
                 logger.error(if (t is IOException) "Network failure" else "Conversion failure", t)
             }
 
@@ -29,6 +30,8 @@ class JourneyPlannerApi : IJourneyPlannerApi {
                 call: Call<JourneyPlannerResult>,
                 response: Response<JourneyPlannerResult>
             ) {
+//                TODO("Remove later")
+                logger.info("response.raw().request(): ${response.raw().request()}")
                 if (response.isSuccessful) {
                     val responseBodyString = response.body().toString()
 

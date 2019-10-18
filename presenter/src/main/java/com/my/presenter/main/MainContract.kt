@@ -6,7 +6,7 @@ class MainContract {
     interface View : BaseContract.View {
         fun getFromLocation(): String
         fun getToLocation(): String
-        fun showItineraryResultActivity()
+        fun showResultActivity()
         fun showResult(result: String)
     }
 
@@ -15,6 +15,5 @@ class MainContract {
         fun onEditPreferencesClicked()
         fun onPlanMyJourneyClicked()
         fun onMyJourneysClicked()
-        fun cancelAsyncCall()
     }
 }

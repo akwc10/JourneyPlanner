@@ -9,16 +9,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.my.journeyplanner.views.itineraryresults.ItineraryResultsActivity
+import com.my.journeyplanner.views.results.ResultsActivity
 import com.my.presenter.main.MainContract
 import com.my.presenter.main.MainPresenter
-import com.my.repository.JourneyPlannerRepository
 
-const val EXTRA_JOURNEY_PLANNER_RESULT = "com.my.journeyplanner.JOURNEY_PLANNER_RESULT"
+const val EXTRA_FROM_LOCATION = "com.my.journeyplanner.FROM_LOCATION"
+const val EXTRA_TO_LOCATION = "com.my.journeyplanner.TO_LOCATION"
 
 class MainActivity : AppCompatActivity(), MainContract.View {
 
-    private val mainPresenter by lazy { MainPresenter(this, JourneyPlannerRepository()) }
+    private val mainPresenter by lazy { MainPresenter(this) }
 
     private val editTextFromLocation by lazy { findViewById<EditText>(R.id.editTextFromLocation) }
     private val editTextToLocation by lazy { findViewById<EditText>(R.id.editTextToLocation) }
@@ -39,7 +39,8 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 //        editTextFromLocation.setText("Marylebone Station")
 //        editTextToLocation.setText("Liverpool Street")
         editTextFromLocation.setText("Leicester Square Underground Station")
-        editTextToLocation.setText("Liverpool Street Underground Station")
+//        editTextToLocation.setText("Liverpool Street Underground Station")
+        editTextToLocation.setText("heathrow station, Cross Street, London, UK")
 //        editTextFromLocation.setText("bfdbfdbdfbfd")
 //        editTextToLocation.setText("bfdbfdbdfbfbd")
         textViewResult.movementMethod = ScrollingMovementMethod()
@@ -49,10 +50,11 @@ class MainActivity : AppCompatActivity(), MainContract.View {
 
     override fun getToLocation() = editTextToLocation.text.toString()
 
-    override fun showItineraryResultActivity() {
-        startActivity(Intent(this, ItineraryResultsActivity::class.java))
-//        TODO("Why not conforming to Serializable?")
-//            .putExtra(EXTRA_JOURNEY_PLANNER_RESULT, mainPresenter.getJourneyPlannerResult()))
+    override fun showResultActivity() {
+        startActivity(Intent(this, ResultsActivity::class.java).apply {
+            putExtra(EXTRA_FROM_LOCATION, getFromLocation())
+            putExtra(EXTRA_TO_LOCATION, getToLocation())
+        })
     }
 
     override fun showResult(result: String) {
@@ -76,10 +78,5 @@ class MainActivity : AppCompatActivity(), MainContract.View {
         buttonPlanMyJourney.setOnClickListener {
             mainPresenter.onPlanMyJourneyClicked()
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        mainPresenter.cancelAsyncCall()
     }
 }
