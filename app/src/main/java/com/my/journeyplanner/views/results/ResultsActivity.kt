@@ -46,12 +46,12 @@ class ResultsActivity : AppCompatActivity(), ResultsContract.View,
 
     override fun showItineraryResultsFragment(journeys: List<Journey>) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentResults, ItineraryResultsFragment.newInstance(journeys)).commit()
+            .replace(R.id.frameLayoutFragmentContainerResults, ItineraryResultsFragment.newInstance(journeys)).commit()
     }
 
     override fun showItineraryResultsLegsFragment(legs: List<Journey.Leg>) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentResults, ItineraryResultsLegsFragment.newInstance(legs))
+            .replace(R.id.frameLayoutFragmentContainerResults, ItineraryResultsLegsFragment.newInstance(legs))
             .addToBackStack(null).commit()
     }
 
