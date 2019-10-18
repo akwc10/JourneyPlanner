@@ -75,6 +75,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
+        android:id="@+id/frameLayoutFragmentContainerResults"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -85,11 +86,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewItineraryResults">
-
-        <fragment
-            android:id="@+id/fragmentResults"
-            android:name="com.my.journeyplanner.views.itineraryresults.ItineraryResultsFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
