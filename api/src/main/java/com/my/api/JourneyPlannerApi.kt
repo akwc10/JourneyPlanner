@@ -34,7 +34,6 @@ class JourneyPlannerApi : IJourneyPlannerApi {
                 logger.info("response.raw().request(): ${response.raw().request()}")
                 if (response.isSuccessful) {
                     val responseBodyString = response.body().toString()
-
                     callback.onSuccess(
                         when {
                             responseBodyString.contains(ITINERARY_RESULT) -> transformItineraryTO(

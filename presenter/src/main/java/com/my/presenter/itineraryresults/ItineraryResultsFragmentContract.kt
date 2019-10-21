@@ -1,4 +1,4 @@
-package com.my.presenter.itineraryresultsfragment
+package com.my.presenter.itineraryresults
 
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.presenter.base.BaseContract
