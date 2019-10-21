@@ -36,7 +36,7 @@ class ItineraryResultsCardviewListAdapter(private val itemClickListener: (Journe
             """${journey.startDateTime.format(timeFormatter)} - ${journey.arrivalDateTime.format(
                 timeFormatter
             )}${Duration.between(journey.startDateTime, journey.arrivalDateTime)
-                .toMinutes().toString().padStart(71, ' ')}${R.string.mins}
+                .toMinutes().toString().padStart(71, ' ')}${context.getString(R.string.mins)}
 
     """.trimMargin()
         journey.legs.forEach { leg ->
@@ -44,7 +44,7 @@ class ItineraryResultsCardviewListAdapter(private val itemClickListener: (Journe
 
 ${leg.mode.padEnd(14 - leg.mode.length, ' ')}   ${leg.instructionSummary}
 ||${Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString()
-                .padStart(18, ' ')}${R.string.mins}
+                .padStart(18, ' ')}${context.getString(R.string.mins)}
 """.trimMargin()
         }
         holder.textViewJourney.text = formattedJourney
