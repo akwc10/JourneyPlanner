@@ -36,7 +36,7 @@ class ResultsPresenter(
                 override fun onSuccess(result: JourneyPlannerResultDomainModel) {
                     when (result) {
                         is JourneyPlannerResultDomainModel.Itinerary -> {
-                            view.showItineraryResultsCardviewFragment(result.journeys)
+                            view.showItineraryResultsFragment(result.journeys)
                         }
                         is JourneyPlannerResultDomainModel.FromToDisambiguationOptions -> {
 //                            TODO("No match")

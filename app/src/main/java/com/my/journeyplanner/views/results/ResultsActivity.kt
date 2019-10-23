@@ -13,9 +13,7 @@ import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.EXTRA_FROM_LOCATION
 import com.my.journeyplanner.EXTRA_TO_LOCATION
 import com.my.journeyplanner.R
-import com.my.journeyplanner.views.itineraryresults.ItineraryResultsCardviewFragment
 import com.my.journeyplanner.views.itineraryresults.ItineraryResultsFragment
-import com.my.journeyplanner.views.itineraryresultslegs.ItineraryResultsLegsFragment
 import com.my.presenter.results.ResultsContract
 import com.my.presenter.results.ResultsPresenter
 import com.my.repository.JourneyPlannerRepository
@@ -24,8 +22,7 @@ import mu.KotlinLogging
 private val logger = KotlinLogging.logger {}
 
 class ResultsActivity : AppCompatActivity(), ResultsContract.View,
-    ItineraryResultsFragment.OnItineraryResultsFragmentInteractionListener,
-    ItineraryResultsCardviewFragment.OnItineraryResultsCardviewFragmentInteractionListener {
+    ItineraryResultsFragment.Listener {
     private val fromLocation by lazy { intent.getStringExtra(EXTRA_FROM_LOCATION) }
     private val toLocation by lazy { intent.getStringExtra(EXTRA_TO_LOCATION) }
     private val itineraryResultsPresenter by lazy {
@@ -53,20 +50,6 @@ class ResultsActivity : AppCompatActivity(), ResultsContract.View,
 
     }
 
-    override fun showItineraryResultsFragment(journeys: List<Journey>) {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.frameLayoutFragmentContainerResults,
-            ItineraryResultsFragment.newInstance(journeys)
-        ).commit()
-    }
-
-    override fun showItineraryResultsLegsFragment(legs: List<Journey.Leg>) {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.frameLayoutFragmentContainerResults,
-            ItineraryResultsLegsFragment.newInstance(legs)
-        ).addToBackStack(null).commit()
-    }
-
     override fun showDisambiguationResultsFragment(disambiguationOptions: JourneyPlannerResultDomainModel.FromToDisambiguationOptions) {
 
     }
@@ -88,18 +71,14 @@ class ResultsActivity : AppCompatActivity(), ResultsContract.View,
         }.show()
     }
 
-    override fun onItineraryResultsFragmentInteraction(legs: List<Journey.Leg>) {
-        showItineraryResultsLegsFragment(legs)
-    }
-
-    override fun showItineraryResultsCardviewFragment(journeys: List<Journey>) {
+    override fun showItineraryResultsFragment(journeys: List<Journey>) {
         supportFragmentManager.beginTransaction().replace(
             R.id.frameLayoutFragmentContainerResults,
-            ItineraryResultsCardviewFragment.newInstance(journeys)
+            ItineraryResultsFragment.newInstance(journeys)
         ).commit()
     }
 
-    override fun onItineraryResultsCardviewFragmentInteraction(journey: Journey) {
+    override fun onItineraryResultsFragmentInteraction(journey: Journey) {
         showDetailedJourneyActivity(journey)
     }
 
