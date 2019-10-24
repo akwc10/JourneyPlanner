@@ -3,12 +3,14 @@ package com.my.journeyplanner.views.itineraryresults
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.R
+import com.my.journeyplanner.helpers.addLegRow
 import mu.KotlinLogging
 import org.threeten.bp.Duration
 import org.threeten.bp.format.DateTimeFormatter
@@ -19,10 +21,10 @@ class ItineraryResultsListAdapter(private val itemClickListener: (Journey) -> Un
     ListAdapter<Journey, ItineraryResultsListAdapter.MyViewHolder>(JourneyDiffCallback()) {
 
     class MyViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
-        val textViewJourney: TextView = view.findViewById(R.id.textViewJourney)
         val textViewStartAndArrivalTime: TextView =
             view.findViewById(R.id.textViewStartAndArrivalTime)
         val textViewDuration: TextView = view.findViewById(R.id.textViewDuration)
+        val linearLayoutLegs: LinearLayout = view.findViewById(R.id.linearLayoutLegs)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -46,16 +48,16 @@ class ItineraryResultsListAdapter(private val itemClickListener: (Journey) -> Un
                 .toMinutes().toString(),
             context.getString(R.string.mins)
         )
-        var formattedJourney = ""
-        journey.legs.forEach { leg ->
-            formattedJourney += """
-
-${leg.mode.padEnd(14 - leg.mode.length, ' ')}   ${leg.instructionSummary}
-||${Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString()
-                .padStart(18, ' ')}${context.getString(R.string.mins)}
-""".trimMargin()
+        journey.legs.forEachIndexed { index, leg ->
+            holder.linearLayoutLegs.addLegRow(index * 2, leg.mode, leg.instructionSummary)
+            holder.linearLayoutLegs.addLegRow(
+                index * 2 + 1, "|", context.getString(
+                    R.string.textView_duration,
+                    Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString(),
+                    context.getString(R.string.mins)
+                )
+            )
         }
-        holder.textViewJourney.text = formattedJourney
         holder.view.setOnClickListener { itemClickListener(journey) }
     }
 }

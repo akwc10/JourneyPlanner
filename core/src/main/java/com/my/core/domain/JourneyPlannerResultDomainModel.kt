@@ -20,6 +20,9 @@ sealed class JourneyPlannerResultDomainModel : Serializable {
             val legs: List<Leg>,
             val startDateTime: LocalDateTime
         ) : Serializable {
+//            TODO("Move id")
+            val id get() = legs.map { it.id }
+
             data class Leg(
                 val instructionSummary: String,
                 val departureTime: LocalDateTime,
@@ -27,7 +30,9 @@ sealed class JourneyPlannerResultDomainModel : Serializable {
                 val arrivalPoint: String,
                 val departurePoint: String,
                 val mode: String
-            ) : Serializable
+            ) : Serializable {
+                val id get() = Pair(Pair(departurePoint, departureTime), Pair(arrivalPoint, arrivalTime))
+            }
         }
     }
 
