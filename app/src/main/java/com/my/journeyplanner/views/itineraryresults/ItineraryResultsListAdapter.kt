@@ -51,7 +51,7 @@ class ItineraryResultsListAdapter(private val itemClickListener: (Journey) -> Un
         journey.legs.forEachIndexed { index, leg ->
             holder.linearLayoutLegs.addLegRow(index * 2, leg.mode, leg.instructionSummary)
             holder.linearLayoutLegs.addLegRow(
-                index * 2 + 1, "|", context.getString(
+                index * 2 + 1, "", context.getString(
                     R.string.textView_duration,
                     Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString(),
                     context.getString(R.string.mins)
@@ -63,7 +63,14 @@ class ItineraryResultsListAdapter(private val itemClickListener: (Journey) -> Un
 }
 
 class JourneyDiffCallback : DiffUtil.ItemCallback<Journey>() {
-    override fun areItemsTheSame(oldItem: Journey, newItem: Journey) = oldItem == newItem
+    override fun areItemsTheSame(oldItem: Journey, newItem: Journey) = oldItem.id() == newItem.id()
+
+    private fun Journey.id() = this.legs.map {
+        Pair(
+            Pair(it.departurePoint, it.departureTime),
+            Pair(it.arrivalPoint, it.arrivalTime)
+        )
+    }
 
     override fun areContentsTheSame(oldItem: Journey, newItem: Journey) = oldItem == newItem
 }
