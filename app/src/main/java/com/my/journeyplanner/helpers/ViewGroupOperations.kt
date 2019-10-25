@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.my.journeyplanner.R
 
-private const val MODE_OR_EMPTY_DPS = 60
+private const val MODE_OR_EMPTY_DP = 60.0f
 
 fun ViewGroup.addLegRow(rowIndex: Int, modeOrEmpty: String, durationOrInstructionSummary: String) {
     val viewGroupToAdd =
         (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
             .inflate(R.layout.leg_row, null)
     viewGroupToAdd.findViewById<TextView>(R.id.textViewModeOrEmpty).apply {
-        width = MODE_OR_EMPTY_DPS * context.resources.displayMetrics.density.toInt() + 0.5.toInt()
+        width = (MODE_OR_EMPTY_DP * context.resources.displayMetrics.density + 0.5f).toInt()
         text = modeOrEmpty
     }
     viewGroupToAdd.findViewById<TextView>(R.id.textViewDurationOrInstructionSummary).text =
