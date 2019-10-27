@@ -24,10 +24,15 @@ sealed class JourneyPlannerResultDomainModel : Serializable {
                 val instructionSummary: String,
                 val departureTime: LocalDateTime,
                 val arrivalTime: LocalDateTime,
-                val arrivalPoint: String,
                 val departurePoint: String,
+                val arrivalPoint: String,
+                val path: Path,
                 val mode: String
-            ) : Serializable
+            ) : Serializable {
+                data class Path(
+                    val stopPoints: List<String>
+                ) : Serializable
+            }
         }
     }
 

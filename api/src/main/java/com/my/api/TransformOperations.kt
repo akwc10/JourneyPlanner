@@ -19,13 +19,15 @@ fun transformItineraryTO(response: Response<JourneyPlannerResult>): JourneyPlann
                 arrivalDateTime = LocalDateTime.parse(journey.arrivalDateTime),
                 legs = journey.legs.map { leg ->
                     JourneyPlannerResultDomainModel.Itinerary.Journey.Leg(
-                        leg.instruction.summary,
-                        LocalDateTime.parse(leg.departureTime),
-                        LocalDateTime.parse(leg.arrivalTime),
-                        leg.arrivalPoint.commonName,
-                        leg.departurePoint.commonName,
-                        mode = leg.mode.name
-                    )
+                        instructionSummary = leg.instruction.summary,
+                        departureTime = LocalDateTime.parse(leg.departureTime),
+                        arrivalTime = LocalDateTime.parse(leg.arrivalTime),
+                        departurePoint = leg.departurePoint.commonName,
+                        arrivalPoint = leg.arrivalPoint.commonName,
+                        path = JourneyPlannerResultDomainModel.Itinerary.Journey.Leg.Path(
+                            stopPoints = leg.path.stopPoints.map { it.name }
+                        ),
+                        mode = leg.mode.name)
                 },
                 startDateTime = LocalDateTime.parse(journey.startDateTime)
             )

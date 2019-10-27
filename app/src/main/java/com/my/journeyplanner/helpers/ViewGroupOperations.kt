@@ -1,23 +1,32 @@
 package com.my.journeyplanner.helpers
 
 import android.content.Context
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import com.my.journeyplanner.R
 
-private const val MODE_OR_EMPTY_DP = 60.0f
+private const val COLUMN_ZERO_DP = 60.0f
 
-fun ViewGroup.addLegRow(rowIndex: Int, modeOrEmpty: String, durationOrInstructionSummary: String) {
+fun ViewGroup.addTwoColumnRow(
+    rowIndex: Int,
+    columnZeroText: String,
+    columnOneText: String,
+    textStyle: Typeface = Typeface.DEFAULT
+) {
     val viewGroupToAdd =
         (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-            .inflate(R.layout.leg_row, null)
-    viewGroupToAdd.findViewById<TextView>(R.id.textViewModeOrEmpty).apply {
-        width = (MODE_OR_EMPTY_DP * context.resources.displayMetrics.density + 0.5f).toInt()
-        text = modeOrEmpty
+            .inflate(R.layout.two_columns_row, null)
+    viewGroupToAdd.findViewById<TextView>(R.id.textViewColumnZero).apply {
+        typeface = textStyle
+        width = (COLUMN_ZERO_DP * context.resources.displayMetrics.density + 0.5f).toInt()
+        text = columnZeroText
     }
-    viewGroupToAdd.findViewById<TextView>(R.id.textViewDurationOrInstructionSummary).text =
-        durationOrInstructionSummary
+    viewGroupToAdd.findViewById<TextView>(R.id.textViewColumnOne).apply {
+        typeface = textStyle
+        text = columnOneText
+    }
     this.addView(
         viewGroupToAdd, rowIndex, ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,

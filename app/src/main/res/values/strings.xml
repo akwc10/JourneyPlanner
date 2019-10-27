@@ -22,4 +22,8 @@
     <string name="mins">mins</string>
     <string name="retry">Retry</string>
     <string name="textView_start_and_arrival_time">%s - %s</string>
+    <string name="textView_duration_and_stops">%s%s%12s</string>
+    <string name="stops">Stops:</string>
+    <string name="textView_departure_point_and_time">%s at %s</string>
+    <string name="textView_arrival_point_and_time">%s at %s</string>
 </resources>

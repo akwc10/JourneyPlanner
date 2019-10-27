@@ -1,10 +1,10 @@
 package com.my.journeyplanner.views.results
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.snackbar.Snackbar
@@ -13,12 +13,14 @@ import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.EXTRA_FROM_LOCATION
 import com.my.journeyplanner.EXTRA_TO_LOCATION
 import com.my.journeyplanner.R
+import com.my.journeyplanner.views.detailedjourney.DetailedJourneyActivity
 import com.my.journeyplanner.views.itineraryresults.ItineraryResultsFragment
 import com.my.presenter.results.ResultsContract
 import com.my.presenter.results.ResultsPresenter
 import com.my.repository.JourneyPlannerRepository
 import mu.KotlinLogging
 
+const val EXTRA_DETAILED_JOURNEY = "com.my.journeyplanner.DETAILED_JOURNEY"
 private val logger = KotlinLogging.logger {}
 
 class ResultsActivity : AppCompatActivity(), ResultsContract.View,
@@ -83,7 +85,11 @@ class ResultsActivity : AppCompatActivity(), ResultsContract.View,
     }
 
     override fun showDetailedJourneyActivity(journey: Journey) {
-//        TODO("Show activity")
-        Toast.makeText(this, journey.toString(), Toast.LENGTH_SHORT).show()
+        startActivity(
+            Intent(this, DetailedJourneyActivity::class.java).putExtra(
+                EXTRA_DETAILED_JOURNEY,
+                journey
+            )
+        )
     }
 }
