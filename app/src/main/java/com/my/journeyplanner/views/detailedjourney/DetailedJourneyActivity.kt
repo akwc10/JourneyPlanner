@@ -56,20 +56,25 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
     private fun addModeAndDeparturePoint(rowIndex: Int, leg: Journey.Leg): Int {
         var rowIndex1 = rowIndex
         linearLayoutLegs.addTwoColumnRow(
-            rowIndex1++,
-            leg.mode,
-            getString(
+            rowIndex = rowIndex1++,
+            columnZeroText = leg.mode,
+            columnOneText = getString(
                 R.string.textView_departure_point_and_time,
                 leg.departurePoint,
                 leg.departureTime.format(timeFormatter)
-            ), Typeface.DEFAULT_BOLD
+            )
         )
         return rowIndex1
     }
 
     private fun addInstructionSummary(rowIndex: Int, leg: Journey.Leg): Int {
         var rowIndex1 = rowIndex
-        linearLayoutLegs.addTwoColumnRow(rowIndex1++, "", leg.instructionSummary)
+        linearLayoutLegs.addTwoColumnRow(
+            rowIndex = rowIndex1++,
+            columnZeroText = "",
+            columnOneText = leg.instructionSummary,
+            columnOneTextStyle = Typeface.DEFAULT
+        )
         return rowIndex1
     }
 
@@ -78,7 +83,10 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
         val legDuration =
             Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString()
         linearLayoutLegs.addTwoColumnRow(
-            rowIndex1++, "", if (leg.mode == TUBE) {
+            rowIndex = rowIndex1++,
+            columnZeroText = "",
+            columnOneText =
+            if (leg.mode == TUBE) {
                 getString(
                     R.string.textView_duration_and_stops,
                     legDuration,
@@ -86,10 +94,8 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
                     getString(R.string.stops)
                 )
             } else {
-                getString(
-                    R.string.textView_duration, legDuration, getString(R.string.mins)
-                )
-            }, Typeface.DEFAULT_BOLD
+                getString(R.string.textView_duration, legDuration, getString(R.string.mins))
+            }
         )
         return rowIndex1
     }
@@ -97,20 +103,26 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
     private fun addStopPoints(rowIndex: Int, leg: Journey.Leg): Int {
         var rowIndex1 = rowIndex
         leg.path.stopPoints.dropLast(1).forEach { stopPoint ->
-            linearLayoutLegs.addTwoColumnRow(rowIndex1++, "-", stopPoint)
+            linearLayoutLegs.addTwoColumnRow(
+                rowIndex = rowIndex1++,
+                columnZeroText = "-",
+                columnOneText = stopPoint,
+                columnZeroTextStyle = Typeface.DEFAULT,
+                columnOneTextStyle = Typeface.DEFAULT
+            )
         }
         return rowIndex1
     }
 
     private fun addModeAndArrivalPoint(rowIndex: Int, journey: Journey) {
         linearLayoutLegs.addTwoColumnRow(
-            rowIndex,
-            journey.legs.last().mode,
-            getString(
+            rowIndex = rowIndex,
+            columnZeroText = journey.legs.last().mode,
+            columnOneText = getString(
                 R.string.textView_arrival_point_and_time,
                 journey.legs.last().arrivalPoint,
                 journey.arrivalDateTime.format(timeFormatter)
-            ), Typeface.DEFAULT_BOLD
+            )
         )
     }
 }

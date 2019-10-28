@@ -13,18 +13,19 @@ fun ViewGroup.addTwoColumnRow(
     rowIndex: Int,
     columnZeroText: String,
     columnOneText: String,
-    textStyle: Typeface = Typeface.DEFAULT
+    columnZeroTextStyle: Typeface = Typeface.DEFAULT_BOLD,
+    columnOneTextStyle: Typeface = Typeface.DEFAULT_BOLD
 ) {
     val viewGroupToAdd =
         (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
             .inflate(R.layout.two_columns_row, null)
     viewGroupToAdd.findViewById<TextView>(R.id.textViewColumnZero).apply {
-        typeface = textStyle
+        typeface = columnZeroTextStyle
         width = (COLUMN_ZERO_DP * context.resources.displayMetrics.density + 0.5f).toInt()
         text = columnZeroText
     }
     viewGroupToAdd.findViewById<TextView>(R.id.textViewColumnOne).apply {
-        typeface = textStyle
+        typeface = columnOneTextStyle
         text = columnOneText
     }
     this.addView(

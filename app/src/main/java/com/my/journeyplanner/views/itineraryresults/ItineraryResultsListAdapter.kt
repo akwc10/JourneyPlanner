@@ -1,5 +1,6 @@
 package com.my.journeyplanner.views.itineraryresults
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,13 +50,21 @@ class ItineraryResultsListAdapter(private val itemClickListener: (Journey) -> Un
             context.getString(R.string.mins)
         )
         journey.legs.forEachIndexed { index, leg ->
-            holder.linearLayoutLegs.addTwoColumnRow(index * 2, leg.mode, leg.instructionSummary)
             holder.linearLayoutLegs.addTwoColumnRow(
-                index * 2 + 1, "", context.getString(
+                rowIndex = index * 2,
+                columnZeroText = leg.mode,
+                columnOneText = leg.instructionSummary,
+                columnOneTextStyle = Typeface.DEFAULT
+            )
+            holder.linearLayoutLegs.addTwoColumnRow(
+                rowIndex = index * 2 + 1,
+                columnZeroText = "",
+                columnOneText = context.getString(
                     R.string.textView_duration,
                     Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString(),
                     context.getString(R.string.mins)
-                )
+                ),
+                columnZeroTextStyle = Typeface.DEFAULT
             )
         }
         holder.view.setOnClickListener { itemClickListener(journey) }
