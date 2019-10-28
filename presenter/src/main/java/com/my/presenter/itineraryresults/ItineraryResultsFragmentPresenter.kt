@@ -1,4 +1,4 @@
-package com.my.presenter.itineraryresultsfragment
+package com.my.presenter.itineraryresults
 
 class ItineraryResultsFragmentPresenter(private val view: ItineraryResultsFragmentContract.View) :
     ItineraryResultsFragmentContract.Presenter

@@ -6,32 +6,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
-import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey.Leg
 import com.my.journeyplanner.R
-import com.my.presenter.itineraryresultsfragment.ItineraryResultsFragmentContract
+import com.my.journeyplanner.helpers.MarginItemDecoration
+import com.my.presenter.itineraryresults.ItineraryResultsFragmentContract
+import mu.KotlinLogging
 import java.io.Serializable
 
 private const val EXTRA_JOURNEYS_DOMAIN_MODEL = "com.my.journeyplanner.JOURNEYS_DOMAIN_MODEL"
+private const val DIVIDER_SPACE_HEIGHT = 32
+private val logger = KotlinLogging.logger {}
 
 class ItineraryResultsFragment : Fragment(), ItineraryResultsFragmentContract.View {
-    private var listener: OnItineraryResultsFragmentInteractionListener? = null
+    private var listener: Listener? = null
     private val viewAdapter by lazy {
-        ItineraryResultsListAdapter { legs: List<Leg> -> onJourneyPressed(legs) }
+        ItineraryResultsListAdapter { journey: Journey -> onJourneyPressed(journey) }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_itinerary_results, container, false)
+        val root = inflater.inflate(R.layout.fragment_cardview, container, false)
         root.findViewById<RecyclerView>(R.id.recyclerViewItineraryResults).apply {
             layoutManager = LinearLayoutManager(context)
             adapter = viewAdapter
             this.setHasFixedSize(true)
-        }.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }.addItemDecoration(MarginItemDecoration(DIVIDER_SPACE_HEIGHT))
         return root
     }
 
@@ -47,16 +49,16 @@ class ItineraryResultsFragment : Fragment(), ItineraryResultsFragmentContract.Vi
         viewAdapter.submitList(journeys)
     }
 
-    private fun onJourneyPressed(legs: List<Leg>) {
-        listener?.onItineraryResultsFragmentInteraction(legs)
+    private fun onJourneyPressed(journey: Journey) {
+        listener?.onItineraryResultsFragmentInteraction(journey)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnItineraryResultsFragmentInteractionListener) {
+        if (context is Listener) {
             listener = context
         } else {
-            throw IllegalStateException("$context must implement OnItineraryResultsFragmentInteractionListener")
+            throw IllegalStateException("$context must implement Listener")
         }
     }
 
@@ -65,8 +67,8 @@ class ItineraryResultsFragment : Fragment(), ItineraryResultsFragmentContract.Vi
         super.onDetach()
     }
 
-    interface OnItineraryResultsFragmentInteractionListener {
-        fun onItineraryResultsFragmentInteraction(legs: List<Leg>)
+    interface Listener {
+        fun onItineraryResultsFragmentInteraction(journey: Journey)
     }
 
     companion object {

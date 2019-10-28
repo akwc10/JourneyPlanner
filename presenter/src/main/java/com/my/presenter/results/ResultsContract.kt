@@ -8,11 +8,11 @@ class ResultsContract {
     interface View : BaseContract.View {
         fun showMapActivity(mapItineraryResults: List<Any>)
         fun showSaveJourneyActivity(journeyDetails: List<Any>)
-        fun showItineraryResultsFragment(journeys: List<Journey>)
-        fun showItineraryResultsLegsFragment(legs: List<Journey.Leg>)
         fun showDisambiguationResultsFragment(disambiguationOptions: JourneyPlannerResultDomainModel.FromToDisambiguationOptions)
         fun showNoResultsFragment()
-        fun showErrorFragment(error: String)
+        fun showErrorSnackbar(error: String)
+        fun showItineraryResultsFragment(journeys: List<Journey>)
+        fun showDetailedJourneyActivity(journey: Journey)
     }
 
     interface Presenter : BaseContract.Presenter<View> {

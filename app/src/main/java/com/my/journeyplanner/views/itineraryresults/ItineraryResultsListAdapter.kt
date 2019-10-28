@@ -3,52 +3,74 @@ package com.my.journeyplanner.views.itineraryresults
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.R
+import com.my.journeyplanner.helpers.addLegRow
+import mu.KotlinLogging
 import org.threeten.bp.Duration
+import org.threeten.bp.format.DateTimeFormatter
 
-class ItineraryResultsListAdapter(private val itemClickListener: (List<Journey.Leg>) -> Unit) :
+private val logger = KotlinLogging.logger {}
+
+class ItineraryResultsListAdapter(private val itemClickListener: (Journey) -> Unit) :
     ListAdapter<Journey, ItineraryResultsListAdapter.MyViewHolder>(JourneyDiffCallback()) {
+
     class MyViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
-        val textViewStartTime: TextView = view.findViewById(R.id.textViewStartTime)
-        val textViewArrivalTime: TextView = view.findViewById(R.id.textViewArrivalTime)
-        val textViewLegs: TextView = view.findViewById(R.id.textViewLegs)
+        val textViewStartAndArrivalTime: TextView =
+            view.findViewById(R.id.textViewStartAndArrivalTime)
         val textViewDuration: TextView = view.findViewById(R.id.textViewDuration)
+        val linearLayoutLegs: LinearLayout = view.findViewById(R.id.linearLayoutLegs)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MyViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.recycler_text_views_itinerary_results, parent, false)
+                .inflate(R.layout.card_view_journey, parent, false)
         )
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val context = holder.view.context
         val journey = getItem(position)
-        holder.textViewStartTime.text = context.getString(
-            R.string.textView_start_time,
-            journey.startDateTime.toLocalTime().toString()
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+        holder.textViewStartAndArrivalTime.text = context.getString(
+            R.string.textView_start_and_arrival_time,
+            journey.startDateTime.format(timeFormatter),
+            journey.arrivalDateTime.format(timeFormatter)
         )
-        holder.textViewArrivalTime.text = context.getString(
-            R.string.textView_arrival_time,
-            journey.arrivalDateTime.toLocalTime().toString()
-        )
-        holder.textViewLegs.text =
-            context.getString(R.string.textView_legs, journey.legs.size.toString())
         holder.textViewDuration.text = context.getString(
             R.string.textView_duration,
-            Duration.between(journey.startDateTime, journey.arrivalDateTime).toMinutes().toString()
+            Duration.between(journey.startDateTime, journey.arrivalDateTime)
+                .toMinutes().toString(),
+            context.getString(R.string.mins)
         )
-        holder.view.setOnClickListener { itemClickListener(journey.legs) }
+        journey.legs.forEachIndexed { index, leg ->
+            holder.linearLayoutLegs.addLegRow(index * 2, leg.mode, leg.instructionSummary)
+            holder.linearLayoutLegs.addLegRow(
+                index * 2 + 1, "", context.getString(
+                    R.string.textView_duration,
+                    Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString(),
+                    context.getString(R.string.mins)
+                )
+            )
+        }
+        holder.view.setOnClickListener { itemClickListener(journey) }
+    }
+}
+
+class JourneyDiffCallback : DiffUtil.ItemCallback<Journey>() {
+    override fun areItemsTheSame(oldItem: Journey, newItem: Journey) = oldItem.id() == newItem.id()
+
+    private fun Journey.id() = this.legs.map {
+        Pair(
+            Pair(it.departurePoint, it.departureTime),
+            Pair(it.arrivalPoint, it.arrivalTime)
+        )
     }
 
-    class JourneyDiffCallback : DiffUtil.ItemCallback<Journey>() {
-        override fun areItemsTheSame(oldItem: Journey, newItem: Journey) = oldItem == newItem
-
-        override fun areContentsTheSame(oldItem: Journey, newItem: Journey) = oldItem == newItem
-    }
+    override fun areContentsTheSame(oldItem: Journey, newItem: Journey) = oldItem == newItem
 }

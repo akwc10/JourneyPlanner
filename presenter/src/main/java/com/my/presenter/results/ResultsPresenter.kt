@@ -4,7 +4,10 @@ import com.my.core.domain.ICancellable
 import com.my.core.domain.ICustomCallback
 import com.my.core.domain.IJourneyPlannerRepository
 import com.my.core.domain.JourneyPlannerResultDomainModel
+import mu.KotlinLogging
 import java.io.IOException
+
+private val logger = KotlinLogging.logger {}
 
 class ResultsPresenter(
     private val view: ResultsContract.View,
@@ -43,7 +46,7 @@ class ResultsPresenter(
                 }
 
                 override fun onError(t: Throwable) {
-                    view.showErrorFragment(if (t is IOException) "Network failure" else "Conversion failure")
+                    view.showErrorSnackbar(if (t is IOException) "Network failure" else "Conversion failure")
                 }
             })
     }
