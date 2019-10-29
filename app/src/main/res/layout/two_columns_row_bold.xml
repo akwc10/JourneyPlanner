@@ -8,10 +8,12 @@
     <TextView
         android:id="@+id/textViewColumnZero"
         android:layout_width="60dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textViewColumnOne"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textStyle="bold" />
 </LinearLayout>

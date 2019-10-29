@@ -1,32 +1,23 @@
 package com.my.journeyplanner.helpers
 
 import android.content.Context
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import com.my.journeyplanner.R
 
-private const val COLUMN_ZERO_DP = 60.0f
-
 fun ViewGroup.addTwoColumnRow(
     rowIndex: Int,
-    columnZeroText: String,
-    columnOneText: String,
-    columnZeroTextStyle: Typeface = Typeface.DEFAULT_BOLD,
-    columnOneTextStyle: Typeface = Typeface.DEFAULT_BOLD
+    layoutResourceId: Int = R.layout.two_columns_row,
+    columnZeroText: String = "",
+    columnOneText: String = ""
 ) {
     val viewGroupToAdd =
         (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-            .inflate(R.layout.two_columns_row, null)
-    viewGroupToAdd.findViewById<TextView>(R.id.textViewColumnZero).apply {
-        typeface = columnZeroTextStyle
-        width = (COLUMN_ZERO_DP * context.resources.displayMetrics.density + 0.5f).toInt()
-        text = columnZeroText
-    }
-    viewGroupToAdd.findViewById<TextView>(R.id.textViewColumnOne).apply {
-        typeface = columnOneTextStyle
-        text = columnOneText
+            .inflate(layoutResourceId, null)
+    viewGroupToAdd.apply {
+        findViewById<TextView>(R.id.textViewColumnZero).text = columnZeroText
+        findViewById<TextView>(R.id.textViewColumnOne).text = columnOneText
     }
     this.addView(
         viewGroupToAdd, rowIndex, ViewGroup.LayoutParams(

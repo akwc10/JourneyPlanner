@@ -1,10 +1,11 @@
 package com.my.journeyplanner.views.detailedjourney
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.R
 import com.my.journeyplanner.helpers.addTwoColumnRow
@@ -14,12 +15,21 @@ import org.threeten.bp.Duration
 import org.threeten.bp.format.DateTimeFormatter
 
 private const val TUBE = "tube"
+private const val BUS = "bus"
 
 class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.View {
     private val detailedJourney by lazy { intent.getSerializableExtra(EXTRA_DETAILED_JOURNEY) as Journey }
     private val cardViewDetailedJourney by lazy { findViewById<CustomCardView>(R.id.cardViewDetailedJourney) }
     private val linearLayoutLegs by lazy { cardViewDetailedJourney.findViewById<LinearLayout>(R.id.linearLayoutLegs) }
     private val timeFormatter by lazy { DateTimeFormatter.ofPattern("HH:mm") }
+    private val viewAdapter by lazy { LegsListAdapter() }
+    private val recyclerViewLegs by lazy {
+        findViewById<RecyclerView>(R.id.recyclerViewLegs).apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = viewAdapter
+            this.setHasFixedSize(true)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +38,8 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
     }
 
     override fun updateDetailedJourney(journey: Journey) {
+//        viewAdapter.submitList(journey.legs)
+
         addStartAndArrivalTimeAndDuration(journey)
         var rowIndex = 0
         journey.legs.forEach { leg ->
@@ -57,6 +69,7 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
         var rowIndex1 = rowIndex
         linearLayoutLegs.addTwoColumnRow(
             rowIndex = rowIndex1++,
+            layoutResourceId = R.layout.two_columns_row_bold,
             columnZeroText = leg.mode,
             columnOneText = getString(
                 R.string.textView_departure_point_and_time,
@@ -71,9 +84,8 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
         var rowIndex1 = rowIndex
         linearLayoutLegs.addTwoColumnRow(
             rowIndex = rowIndex1++,
-            columnZeroText = "",
-            columnOneText = leg.instructionSummary,
-            columnOneTextStyle = Typeface.DEFAULT
+            layoutResourceId = R.layout.two_columns_row_bold_then_default,
+            columnOneText = leg.instructionSummary
         )
         return rowIndex1
     }
@@ -82,21 +94,28 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
         var rowIndex1 = rowIndex
         val legDuration =
             Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString()
-        linearLayoutLegs.addTwoColumnRow(
-            rowIndex = rowIndex1++,
-            columnZeroText = "",
-            columnOneText =
-            if (leg.mode == TUBE) {
-                getString(
-                    R.string.textView_duration_and_stops,
+        if ((leg.mode == TUBE || leg.mode == BUS) && leg.path.stopPoints.size > 1) {
+            linearLayoutLegs.addTwoColumnRow(
+                rowIndex = rowIndex1++,
+                layoutResourceId = R.layout.two_columns_row_duration_and_stops,
+                columnZeroText = getString(
+                    R.string.textView_duration,
                     legDuration,
-                    getString(R.string.mins),
-                    getString(R.string.stops)
+                    getString(R.string.mins)
+                ),
+                columnOneText = getString(R.string.textView_stops)
+            )
+        } else {
+            linearLayoutLegs.addTwoColumnRow(
+                rowIndex = rowIndex1++,
+                layoutResourceId = R.layout.two_columns_row_default_then_bold,
+                columnOneText = getString(
+                    R.string.textView_duration,
+                    legDuration,
+                    getString(R.string.mins)
                 )
-            } else {
-                getString(R.string.textView_duration, legDuration, getString(R.string.mins))
-            }
-        )
+            )
+        }
         return rowIndex1
     }
 
@@ -106,9 +125,7 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
             linearLayoutLegs.addTwoColumnRow(
                 rowIndex = rowIndex1++,
                 columnZeroText = "-",
-                columnOneText = stopPoint,
-                columnZeroTextStyle = Typeface.DEFAULT,
-                columnOneTextStyle = Typeface.DEFAULT
+                columnOneText = stopPoint
             )
         }
         return rowIndex1
@@ -117,6 +134,7 @@ class DetailedJourneyActivity : AppCompatActivity(), DetailedJourneyContract.Vie
     private fun addModeAndArrivalPoint(rowIndex: Int, journey: Journey) {
         linearLayoutLegs.addTwoColumnRow(
             rowIndex = rowIndex,
+            layoutResourceId = R.layout.two_columns_row_bold,
             columnZeroText = journey.legs.last().mode,
             columnOneText = getString(
                 R.string.textView_arrival_point_and_time,
