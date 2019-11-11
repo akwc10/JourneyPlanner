@@ -145,8 +145,12 @@ sealed class JourneyPlannerResult {
                     val `$type`: String,
                     val elevation: List<Any>,
                     val lineString: String,
-                    val stopPoints: List<Any>
-                )
+                    val stopPoints: List<StopPoint>
+                ) {
+                    data class StopPoint(
+                        val name: String
+                    )
+                }
 
                 data class ArrivalPoint(
                     val `$type`: String,

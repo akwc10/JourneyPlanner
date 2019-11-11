@@ -6,18 +6,19 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.my.journeyplanner.R
 
-private const val MODE_OR_EMPTY_DP = 60.0f
-
-fun ViewGroup.addLegRow(rowIndex: Int, modeOrEmpty: String, durationOrInstructionSummary: String) {
+fun ViewGroup.addTwoColumnRow(
+    rowIndex: Int,
+    layoutResourceId: Int = R.layout.two_columns_row,
+    columnZeroText: String = "",
+    columnOneText: String = ""
+) {
     val viewGroupToAdd =
         (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-            .inflate(R.layout.leg_row, null)
-    viewGroupToAdd.findViewById<TextView>(R.id.textViewModeOrEmpty).apply {
-        width = (MODE_OR_EMPTY_DP * context.resources.displayMetrics.density + 0.5f).toInt()
-        text = modeOrEmpty
+            .inflate(layoutResourceId, null)
+    viewGroupToAdd.apply {
+        findViewById<TextView>(R.id.textViewColumnZero).text = columnZeroText
+        findViewById<TextView>(R.id.textViewColumnOne).text = columnOneText
     }
-    viewGroupToAdd.findViewById<TextView>(R.id.textViewDurationOrInstructionSummary).text =
-        durationOrInstructionSummary
     this.addView(
         viewGroupToAdd, rowIndex, ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.my.core.domain.JourneyPlannerResultDomainModel.Itinerary.Journey
 import com.my.journeyplanner.R
-import com.my.journeyplanner.helpers.addLegRow
+import com.my.journeyplanner.helpers.addTwoColumnRow
 import mu.KotlinLogging
 import org.threeten.bp.Duration
 import org.threeten.bp.format.DateTimeFormatter
@@ -49,9 +49,16 @@ class ItineraryResultsListAdapter(private val itemClickListener: (Journey) -> Un
             context.getString(R.string.mins)
         )
         journey.legs.forEachIndexed { index, leg ->
-            holder.linearLayoutLegs.addLegRow(index * 2, leg.mode, leg.instructionSummary)
-            holder.linearLayoutLegs.addLegRow(
-                index * 2 + 1, "", context.getString(
+            holder.linearLayoutLegs.addTwoColumnRow(
+                rowIndex = index * 2,
+                layoutResourceId = R.layout.two_columns_row_bold_then_default,
+                columnZeroText = leg.mode,
+                columnOneText = leg.instructionSummary
+            )
+            holder.linearLayoutLegs.addTwoColumnRow(
+                rowIndex = index * 2 + 1,
+                layoutResourceId = R.layout.two_columns_row_default_then_bold,
+                columnOneText = context.getString(
                     R.string.textView_duration,
                     Duration.between(leg.departureTime, leg.arrivalTime).toMinutes().toString(),
                     context.getString(R.string.mins)
